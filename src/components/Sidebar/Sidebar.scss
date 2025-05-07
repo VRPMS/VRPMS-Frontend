@@ -1,0 +1,74 @@
+@import '../../index';
+
+.sidebar{
+  font-weight: 500;
+  width: 306px;
+  height: 100vw;
+  position: fixed;
+  background-color: white;
+  padding: 32px 28px;
+}
+
+.sidebar__logo-container {
+  display: flex;
+  padding-left: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 44px;
+}
+
+.sidebar__logo-container__logo{
+  color: $mainTextColor;
+  font-family: Mont, sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.sidebar__logo-container__subtitle{
+  color: $secondTextColor;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar__nav__item{
+  display: flex;
+  padding: 16px 20px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 12px;
+  fill: none;
+  stroke: $mainTextColor;
+
+  transition-property: color, stroke, background-color;
+  transition-timing-function: ease-in;
+  transition-duration: 100ms;
+
+  &:hover {
+    background-color: $accentBgColor;
+    color: #fff;
+    stroke: #fff;
+  }
+
+  &--selected {
+    background-color: $accentBgColor;
+    color: #fff;
+    stroke: #fff;
+  }
+}
+
+.sidebar__nav__item__title{
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+

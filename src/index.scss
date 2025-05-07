@@ -1,0 +1,31 @@
+$mainBg: #F2F1F4;
+$accentBgColor: #262626;
+$mainTextColor: #262626;
+$secondTextColor: #A2A3A5;
+
+
+*{
+  box-sizing: border-box;
+  font-family: Manrope, sans-serif;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $mainBg;
+  color: $mainTextColor;
+}
+
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+a {
+  color: $mainTextColor;
+  text-decoration: none;
+}
