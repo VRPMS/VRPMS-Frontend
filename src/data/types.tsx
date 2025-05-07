@@ -23,12 +23,13 @@ export type TDemand = {
 }
 
 export type Poi = {
-  key: string,
+  id: number,
+  type: ELocationType,
   location: google.maps.LatLngLiteral
 }
 
 export type TLocation = {
-  id: string;
+  id: number;
   name: string;
   type: ELocationType;
   longitude: number;

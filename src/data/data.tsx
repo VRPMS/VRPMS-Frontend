@@ -30,7 +30,7 @@ export const links = [
 
 export const locations: TLocation[] = [
   {
-    id: "0",
+    id: 0,
     name: "вул. Кооперативна, 7, Житомир, Житомирська область, 10001",
     type: ELocationType.WAREHOUSE,
     longitude: 28.7130344,
@@ -47,7 +47,7 @@ export const locations: TLocation[] = [
     ],
   },
   {
-    id: "1",
+    id: 1,
     name: "вул. Захисників Маріуполя, 5, Рівне, Рівненська область, 33000",
     type: ELocationType.CROSS_DOCK,
     longitude: 26.2855705,
@@ -62,7 +62,7 @@ export const locations: TLocation[] = [
     }],
   },
   {
-    id: "2",
+    id: 2,
     name: "Кіоск N9, вулиця Відінська, 1, Рівне, Рівненська область, 33000",
     type: ELocationType.POINT,
     longitude: 26.2748028,
@@ -80,7 +80,8 @@ export const locations: TLocation[] = [
 
 export const points: Poi[] = locations.map(el => {
   return {
-    key: el.id.toString(),
+    id: el.id,
+    type: el.type,
     location: {
       lat: Number(el.latitude),
       lng: Number(el.longitude)
