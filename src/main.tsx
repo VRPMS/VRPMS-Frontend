@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
     <Router>
       <StoreProvider>
-        <APIProvider apiKey={'AIzaSyD3oRQlyJBaAnvNVhnjMsBPc8Z0RC6kDDA'} onLoad={() => console.log('Maps API has loaded.')}>
+        <APIProvider apiKey={'AIzaSyD3oRQlyJBaAnvNVhnjMsBPc8Z0RC6kDDA'}  language="uk" onLoad={() => console.log('Maps API has loaded.')}>
         <App/>
         </APIProvider>
       </StoreProvider>

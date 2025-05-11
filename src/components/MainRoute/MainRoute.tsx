@@ -1,5 +1,7 @@
 function MainRoute () {
-  return;
+  return <>
+    <div></div>
+  </>;
 }
 
 export default MainRoute;

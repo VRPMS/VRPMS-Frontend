@@ -2,11 +2,12 @@ $mainBg: #F2F1F4;
 $accentBgColor: #262626;
 $mainTextColor: #262626;
 $secondTextColor: #A2A3A5;
+$transparentBgColor: #FFFFFFB2;
 
 
 *{
   box-sizing: border-box;
-  font-family: Manrope, sans-serif;
+  font-family: SF Pro Display, sans-serif;
 }
 body {
   margin: 0;
@@ -28,4 +29,9 @@ h1, h2, h3, h4, h5, h6, p {
 a {
   color: $mainTextColor;
   text-decoration: none;
+}
+
+button {
+  padding: 0;
+  margin: 0;
 }

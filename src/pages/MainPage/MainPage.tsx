@@ -1,119 +1,152 @@
 import './MainPage.scss'
-import { useCallback, useEffect, useRef, useState } from "react";
+import { JSX, ReactNode, useEffect, useRef, useState } from "react";
 import MainLocations from "../../components/MainLocations/MainLocations.tsx";
 import MainRoute from "../../components/MainRoute/MainRoute.tsx";
-import { AdvancedMarker, Map, useAdvancedMarkerRef, useMap, InfoWindow } from '@vis.gl/react-google-maps';
-import { locations, points } from "../../data/data.tsx";
+import { AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
+import { colors, locations, pointDefault, points, routes, vehicles } from "../../data/data.tsx";
 import warehousePNG from '../../assets/images/warehouse.png';
 import crossdockPNG from '../../assets/images/crossdock.png'
 import pointPNG from '../../assets/images/point.png'
-import { ELocationType, Poi } from "../../data/types.tsx";
+import { ELocationType, Poi, TVehicle } from "../../data/types.tsx";
+import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import TextField from '@mui/material/TextField';
+import { Checkbox } from "@mui/material";
+import outlinedSvg from "../../assets/outlined.svg";
 
 function MainPage() {
   const [activeTab, setActiveTab] = useState("locations");
+  const [activeLocation, setActiveLocation] = useState<number | null>(null);
+  const [selectedVehicles, setSelectedVehicles] = useState<TVehicle[]>([]);
   const map = useMap();
   const markerRefs = useRef<Record<string, google.maps.marker.AdvancedMarkerElement>>({});
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
-  const polylineRef = useRef<google.maps.Polyline | null>(null);
-  const isSelected = { current: false };
+  const polylinesRef = useRef<google.maps.Polyline[] | null>([]);
+  const selectedPolylineRef = useRef<google.maps.Polyline | null>(null);
 
-  const origin = points[0].location;
-  const destination = points[0].location;
-  const waypoints = points.slice(1).map(p => ({
-    location: p.location,
-    stopover: true,
-  }));
+  const drawRoute = (routePoints: Poi[], index: number) => {
+    if (routePoints.length < 2) return;
+    const origin = routePoints.find(el => el.type === ELocationType.WAREHOUSE)?.location ?? pointDefault.location;
+    const destination = routePoints.find(el => el.type === ELocationType.WAREHOUSE)?.location ?? pointDefault.location;
+    const waypoints = routePoints.filter(el => el.type !== ELocationType.WAREHOUSE).map(p => ({
+      location: p.location,
+      stopover: true
+    }));
+
+    const directionsService = new google.maps.DirectionsService();
+    directionsService.route({
+      origin,
+      destination,
+      waypoints,
+      travelMode: google.maps.TravelMode.DRIVING,
+      optimizeWaypoints: true,
+    }, (result, status) => {
+      if (status === google.maps.DirectionsStatus.OK && result) {
+        const path = result.routes[0].overview_path;
+        const newPolyline = new google.maps.Polyline({
+          path,
+          map,
+          clickable: true,
+          strokeColor: colors[index],
+          strokeOpacity: 0.8,
+          strokeWeight: 5,
+        });
+
+        newPolyline.addListener('click', () => {
+          if (selectedPolylineRef.current && selectedPolylineRef.current !== newPolyline) {
+            selectedPolylineRef.current?.setOptions({ strokeWeight: 4 });
+          }
+          newPolyline.setOptions({ strokeWeight: 8 });
+          selectedPolylineRef.current = newPolyline;
+        });
+
+        polylinesRef.current?.push(newPolyline);
+      }
+    });
+  };
 
   useEffect(() => {
     if (!map) return;
 
-    const directionsService = new google.maps.DirectionsService();
+    polylinesRef.current?.forEach(polyline => polyline.setMap(null));
+    polylinesRef.current = [];
 
-    directionsService.route(
-      {
-        origin,
-        destination,
-        waypoints,
-        travelMode: google.maps.TravelMode.DRIVING,
-        optimizeWaypoints: false,
-      },
-      (result, status) => {
-        if (status === google.maps.DirectionsStatus.OK && result) {
-          const path = result.routes[0].overview_path;
-          console.log(result)
+    let activeRoutes = routes;
+    if (selectedVehicles.length!==0) {
+      activeRoutes = activeRoutes.filter(el => {
+        return selectedVehicles.find(item => item.id === el.id) && el;
+      })
+    }
 
-          // Створити або оновити полілінію
-          if (polylineRef.current) {
-            polylineRef.current?.setPath(path);
-          } else {
-            const newPolyline = new google.maps.Polyline({
-              path,
-              map,
-              clickable: true,
-              strokeColor: '#FF862A',
-              strokeOpacity: 0.8,
-              strokeWeight: 4,
-            });
+    activeRoutes.map(el => el.points).forEach((el, index) => drawRoute(el, index));
 
-            newPolyline.addListener('click', () => {
-              isSelected.current = true;
-              const currentWeight = newPolyline.get('strokeWeight');
-              newPolyline.setOptions({
-                strokeWeight: currentWeight === 4 ? 8 : 4,
-              });
-            });
-
-            polylineRef.current = newPolyline;
-          }
-
-          map.addListener('click', () => {
-            if (polylineRef.current && isSelected.current) {
-              polylineRef.current?.setOptions({ strokeWeight: 4 });
-              isSelected.current = false;
-            }
-          });
-        } else {
-          console.error('Directions request failed:', status);
-        }
+    const mapClickListener = map.addListener('click', () => {
+      if (selectedPolylineRef.current) {
+        selectedPolylineRef.current?.setOptions({ strokeWeight: 4 });
+        selectedPolylineRef.current = null;
       }
-    );
-  }, [map]);
+      if (infoWindowRef.current) {
+        infoWindowRef.current?.close();
+        setActiveLocation(null);
+        infoWindowRef.current = null;
+      }
+    });
 
-  function onTabClick(tab) {
+    return () => {
+      google.maps.event.removeListener(mapClickListener);
+    };
+  }, [map, selectedVehicles]);
+
+  function onTabClick(tab: string) {
     if (tab !== activeTab) {
       setActiveTab(tab)
     }
   }
 
-  const handleClick = (ev: google.maps.MapMouseEvent, pointId: number) => {
+  const handleClick = (ev: google.maps.MapMouseEvent | null, pointId: number) => {
     if (!map) return;
-    if (!ev.latLng) return;
 
-    const marker = markerRefs.current[pointId.toString()]
+    const marker = markerRefs.current[pointId.toString()];
+    const location = locations.find(el => el.id === pointId);
+    if (!marker || !location) return;
+
     if (infoWindowRef.current) {
       infoWindowRef.current?.close();
-    }
-
-    console.log('marker clicked:', ev.latLng.toString());
-    map.panTo(ev.latLng);
-    if (map.getZoom() <= 13) {
-      map.setZoom(13);
+      setActiveLocation(null);
     }
 
     const infoWindow = new google.maps.InfoWindow({
       content: `<div class="main-map__map__info-window">
-      <h3>${locations.find(el => el.id === pointId)?.name}</h3>
-      <p>${locations.find(el => el.id === pointId)?.latitude}, ${locations.find(el => el.id === pointId)?.longitude}</p>
-    </div>`,
+      <h3>Location ID: ${location.id}</h3>
+      <p>Type: ${location.type === 0 ? 'warehouse' : location.type === 1 ? 'cross-dock' : 'client'}</p>
+      <p>Point: ${location.latitude}, ${location.longitude}</p>
+    </div>`
     });
+
     infoWindow.open({
       anchor: marker,
       map,
       shouldFocus: false,
     });
 
+    infoWindow.addListener('close', () => {
+      setActiveLocation(null);
+    });
+
+    if (ev?.latLng) {
+      map.panTo(ev.latLng);
+    } else if (marker.position) {
+      map.panTo(marker.position);
+    }
+
+    if ((map.getZoom() ?? 0) <= 13) map.setZoom(13);
+
     infoWindowRef.current = infoWindow;
+    setActiveLocation(pointId);
   };
+
 
   return <div className="main">
     <header className="main__header">
@@ -121,7 +154,84 @@ function MainPage() {
         <h1 className="main__header__heading__title">Main page</h1>
         <p className="main__header__heading__subtitle">View locations and routes</p>
       </div>
-      <div>autocomplete</div>
+      <div className="main__header__filter-container">
+        <Autocomplete
+          multiple
+          id="checkboxes-tags-demo"
+          options={vehicles}
+          disableCloseOnSelect
+          onChange={(event: any, newValue: TVehicle[] | null) => {
+            setSelectedVehicles(newValue ?? []);
+          }}
+          value={selectedVehicles}
+          getOptionLabel={(option) => option?.number}
+          renderOption={(props, option, { selected }) => {
+            const { key, ...optionProps } = props;
+            return (
+              <li key={key} {...optionProps}>
+                <Checkbox
+                  icon={<CheckBoxOutlineBlankIcon/> as ReactNode}
+                  checkedIcon={<CheckBoxIcon/> as ReactNode}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                {option?.number}
+              </li> as ReactNode
+            );
+          }}
+          popupIcon={<svg width="24" height="24">
+            <use href={outlinedSvg + "#arrow-down"}/>
+          </svg> as ReactNode}
+          renderInput={(params: AutocompleteRenderInputParams): JSX.Element => {
+            return <TextField
+              inputRef={params.InputProps.ref}
+              inputProps={params.inputProps}
+              InputProps={params.InputProps}
+              InputLabelProps={{ ...params.InputLabelProps, shrink: true }}
+              disabled={false}
+              fullWidth={true}
+              label="Vehicles filter"
+              placeholder="Search vehicle"
+            />
+          }}
+          sx={{
+            '.MuiAutocomplete-tag': {
+              borderRadius: '6px',
+              backgroundColor: '#F2F2F2',
+              margin: 0,
+              fontFamily: 'SF Pro Display, sans-serif',
+            },
+            '.MuiOutlinedInput-root': {
+              padding: '0',
+              fontFamily: 'SF Pro Display, sans-serif',
+              paddingTop: '20px',
+              '.MuiOutlinedInput-notchedOutline ': {
+                borderWidth: '0',
+              },
+              '.MuiAutocomplete-input': {
+                color: '#262626',
+                paddingBottom: '0'
+              },
+              columnGap: '8px',
+              rowGap: '8px',
+            },
+            '.MuiInputLabel-root': {
+              fontSize: '16px',
+              fontWeight: '500',
+              fontFamily: 'SF Pro Display, sans-serif',
+              left: '-8px',
+              top: '3px',
+              color: '#262626'
+            },
+            '.MuiInputLabel-root.Mui-disabled': {
+              color: '#262626'
+            },
+            '.MuiInputBase-root': {
+              width: '400px',
+            },
+          }}
+        />
+      </div>
     </header>
     <div className="main__app">
       <div className="main__map-info">
@@ -143,7 +253,7 @@ function MainPage() {
         </div>
         <div className="main__map-info__container">
           {activeTab === "locations"
-            ? <MainLocations/>
+            ? <MainLocations activeLocation={activeLocation} onLocationClick={handleClick}/>
             : <MainRoute/>}
         </div>
       </div>
@@ -151,7 +261,7 @@ function MainPage() {
         <div className="main__map">
           <Map
             mapId='MAP_ID'
-            defaultZoom={6}
+            defaultZoom={7}
             defaultCenter={{ lat: Number(locations[0].latitude), lng: Number(locations[0].longitude) }}>
             <>
               {points.map((poi: Poi) => {
@@ -164,7 +274,7 @@ function MainPage() {
                     if (el) markerRefs.current[poi.id] = el;
                   }}
                   onClick={(ev) => handleClick(ev, poi.id)}>
-                  <img src={icon} alt="point" width="40" height="40" />
+                  <img src={icon} alt="point" width="40" height="40"/>
                 </AdvancedMarker>
               })}
             </>
