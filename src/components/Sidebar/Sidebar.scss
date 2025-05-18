@@ -46,21 +46,24 @@
   border-radius: 12px;
   fill: none;
   stroke: #262626;
+  border: 2px solid transparent;
 
-  transition-property: color, stroke, background-color;
-  transition-timing-function: ease-in;
+  transition-property: border-color, background-color;
+  transition-timing-function: ease-out;
   transition-duration: 100ms;
 
   &:hover {
-    background-color: #262626;
-    color: #fff;
-    stroke: #fff;
+    background-color: #26262633;
+    border-color: #262626;
+    stroke: #262626;
+    color: #262626;
   }
 
   &--selected {
     background-color: #262626;
     color: #fff;
     stroke: #fff;
+    border-color: #262626;
   }
 }
 

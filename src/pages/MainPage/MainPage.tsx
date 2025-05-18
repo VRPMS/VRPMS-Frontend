@@ -1,29 +1,34 @@
-import './MainPage.scss'
+import './MainPage.scss';
 import { JSX, ReactNode, useEffect, useRef, useState } from "react";
 import MainLocations from "../../components/MainLocations/MainLocations.tsx";
 import MainRoute from "../../components/MainRoute/MainRoute.tsx";
 import { AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
 import { colors, locations, pointDefault, points, routes, vehicles } from "../../data/data.tsx";
 import warehousePNG from '../../assets/images/warehouse.png';
-import crossdockPNG from '../../assets/images/crossdock.png'
-import pointPNG from '../../assets/images/point.png'
+import crossdockPNG from '../../assets/images/crossdock.png';
+import pointPNG from '../../assets/images/point.png';
 import { ELocationType, Poi, TVehicle } from "../../data/types.tsx";
 import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import TextField from '@mui/material/TextField';
 import { Checkbox } from "@mui/material";
 import outlinedSvg from "../../assets/outlined.svg";
 
+type TPolylineRef = {
+  routeId: number,
+  line: google.maps.Polyline
+}
+
 function MainPage() {
-  const [activeTab, setActiveTab] = useState("locations");
+  const [activeTab, setActiveTab] = useState<number>(0);
   const [activeLocation, setActiveLocation] = useState<number | null>(null);
+  const [activeRoute, setActiveRoute] = useState<number | null>(null);
   const [selectedVehicles, setSelectedVehicles] = useState<TVehicle[]>([]);
   const map = useMap();
   const markerRefs = useRef<Record<string, google.maps.marker.AdvancedMarkerElement>>({});
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
-  const polylinesRef = useRef<google.maps.Polyline[] | null>([]);
+  const polylinesRef = useRef<TPolylineRef[]>([]);
   const selectedPolylineRef = useRef<google.maps.Polyline | null>(null);
 
   const drawRoute = (routePoints: Poi[], index: number) => {
@@ -60,9 +65,10 @@ function MainPage() {
           }
           newPolyline.setOptions({ strokeWeight: 8 });
           selectedPolylineRef.current = newPolyline;
+          setActiveRoute(routes[index].id);
         });
 
-        polylinesRef.current?.push(newPolyline);
+        polylinesRef.current.push({ routeId: routes[index].id, line: newPolyline });
       }
     });
   };
@@ -70,17 +76,8 @@ function MainPage() {
   useEffect(() => {
     if (!map) return;
 
-    polylinesRef.current?.forEach(polyline => polyline.setMap(null));
     polylinesRef.current = [];
-
-    let activeRoutes = routes;
-    if (selectedVehicles.length!==0) {
-      activeRoutes = activeRoutes.filter(el => {
-        return selectedVehicles.find(item => item.id === el.id) && el;
-      })
-    }
-
-    activeRoutes.map(el => el.points).forEach((el, index) => drawRoute(el, index));
+    routes.forEach((route, index) => drawRoute(route.points, index));
 
     const mapClickListener = map.addListener('click', () => {
       if (selectedPolylineRef.current) {
@@ -92,14 +89,39 @@ function MainPage() {
         setActiveLocation(null);
         infoWindowRef.current = null;
       }
+      setActiveRoute(null);
     });
 
     return () => {
       google.maps.event.removeListener(mapClickListener);
     };
-  }, [map, selectedVehicles]);
+  }, [map]);
 
-  function onTabClick(tab: string) {
+  useEffect(() => {
+    if (selectedVehicles.length !== 0) {
+      polylinesRef.current.forEach(el => {
+        const route = selectedVehicles.find(item => item.id === el.routeId);
+        if (!route) {
+          el.line.setVisible(false);
+          if (el.routeId === activeRoute) {
+            setActiveRoute(null);
+            if (selectedPolylineRef.current) {
+              selectedPolylineRef.current?.setOptions({ strokeWeight: 4 });
+              selectedPolylineRef.current = null;
+            }
+          }
+        } else {
+          el.line.setVisible(true);
+        }
+      })
+    } else {
+      polylinesRef.current.forEach(el => {
+        el.line.setVisible(true);
+      })
+    }
+  }, [selectedVehicles]);
+
+  function onTabClick(tab: number) {
     if (tab !== activeTab) {
       setActiveTab(tab)
     }
@@ -237,24 +259,24 @@ function MainPage() {
       <div className="main__map-info">
         <div className="main__map-info__tabs">
           <button
-            onClick={() => onTabClick("locations")}
-            className={activeTab === "locations"
+            onClick={() => onTabClick(0)}
+            className={activeTab === 0
               ? "main__map-info__tab main__map-info__tab--active"
               : "main__map-info__tab"}>
             <p>Locations</p>
           </button>
           <button
-            onClick={() => onTabClick("route")}
-            className={activeTab === "route"
+            onClick={() => onTabClick(1)}
+            className={activeTab === 1
               ? "main__map-info__tab main__map-info__tab--active"
               : "main__map-info__tab"}>
             <p>Route</p>
           </button>
         </div>
         <div className="main__map-info__container">
-          {activeTab === "locations"
+          {activeTab === 0
             ? <MainLocations activeLocation={activeLocation} onLocationClick={handleClick}/>
-            : <MainRoute/>}
+            : <MainRoute activeRoute={activeRoute} activeLocation={activeLocation} onLocationClick={handleClick}/>}
         </div>
       </div>
       <div className="main__map__container">

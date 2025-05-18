@@ -6,7 +6,6 @@ import { locations } from "../../data/data.tsx";
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration'
 import { ELocationType } from "../../data/types.tsx";
-import { FC, ReactNode } from "react";
 
 dayjs.extend(duration);
 
@@ -23,6 +22,7 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
       return (el?.id.toString() && el?.id.toString().includes(query))
         || (el?.longitude.toString() && el?.longitude.toString().includes(query))
         || (el?.latitude && el?.latitude.toString().includes(query))
+        || ("Location ID: "+el?.id).includes(query)
     }
   );
 
@@ -39,7 +39,7 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
         <NavLink
           to={paths.locations}
           className="main-locations__header-title">
-          <p className="main-locations__header-title__text">Locations</p>
+          <h2 className="main-locations__header-title__text">Locations</h2>
           <svg className="main-locations__header-title__icon" width="24" height="24">
             <use href={`${outlinedSvg}#arrow-link`}/>
           </svg>

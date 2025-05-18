@@ -1,5 +1,5 @@
 import outlinedSvg from '../assets/outlined.svg';
-import { ELocationType, EVehicleType, Poi, TLocation, TVehicle } from "./types.tsx";
+import { ELocationType, Poi, TDistance, TLocation, TRoute, TVehicle } from "./types.tsx";
 
 export const links = [
   {
@@ -39,7 +39,6 @@ export const locations: TLocation[] = [
     penaltyWait: 5000,
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 46800,
       }
@@ -65,7 +64,6 @@ export const locations: TLocation[] = [
     penaltyWait: 5000,
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 46800,
       }
@@ -91,7 +89,6 @@ export const locations: TLocation[] = [
     penaltyWait: 5000,
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 46800,
       }
@@ -117,7 +114,6 @@ export const locations: TLocation[] = [
     penaltyWait: 5000,
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 46800,
       }
@@ -143,7 +139,6 @@ export const locations: TLocation[] = [
     penaltyWait: 5000,
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 46800,
       }
@@ -169,7 +164,6 @@ export const locations: TLocation[] = [
     penaltyWait: 5000,
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 46800,
       }
@@ -186,7 +180,7 @@ export const locations: TLocation[] = [
     ],
   },
   {
-    id: 6,
+    id: 6, //27
     type: ELocationType.CLIENT,
     longitude: 27.2195519,
     latitude: 51.2703183,
@@ -195,7 +189,6 @@ export const locations: TLocation[] = [
     penaltyWait: 5000,
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 46800,
       }
@@ -212,7 +205,7 @@ export const locations: TLocation[] = [
     ],
   },
   {
-    id: 7,
+    id: 7, //28
     type: ELocationType.CLIENT,
     longitude: 25.8569188,
     latitude: 51.3399703,
@@ -221,7 +214,6 @@ export const locations: TLocation[] = [
     penaltyWait: 5000,
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 46800,
       }
@@ -259,20 +251,20 @@ export const pointDefault = {
   }
 }
 
-export const routes = [
+export const routes: TRoute[] = [
   {
     id: 0,
-    carId: 0,
-    points: [points[0], points[1], points[2], points[0]]
+    vehicleId: 0,
+    points: [points[0], points[1], points[2], points[3], points[0]]
   },
   {
     id: 1,
-    carId: 1,
+    vehicleId: 1,
     points: [points[0], points[6], points[7], points[0]]
   },
   {
     id: 2,
-    carId: 2,
+    vehicleId: 2,
     points: [points[0], points[5], points[1], points[0]]
   },
 ]
@@ -287,12 +279,13 @@ export const colors = [
 export const vehicles: TVehicle[] = [
   {
     id: 0,
-    number: "КМ1038ПО",
-    vehicleType: EVehicleType.TRUCK,
+    vehicleType: {
+      id: 0,
+      name: "Truck"
+    },
     capacity: [40, 20],
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 892800
       }
@@ -303,12 +296,13 @@ export const vehicles: TVehicle[] = [
   },
   {
     id: 1,
-    number: "КМ3765МР",
-    vehicleType: EVehicleType.TRUCK,
+    vehicleType: {
+      id: 0,
+      name: "Truck"
+    },
     capacity: [40, 20],
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 892800
       }
@@ -319,12 +313,13 @@ export const vehicles: TVehicle[] = [
   },
   {
     id: 2,
-    number: "КМ9437ТА",
-    vehicleType: EVehicleType.TRUCK,
+    vehicleType: {
+      id: 0,
+      name: "Truck"
+    },
     capacity: [40, 20],
     timeWindows: [
       {
-        id: 0,
         from: 28800,
         to: 892800
       }
@@ -335,53 +330,85 @@ export const vehicles: TVehicle[] = [
   },
 ];
 
-export const distances = [
+export const distances: TDistance[] = [
   {
     id: 0,
-    carId: "",
-    locationFromId: "",
-    locationToId: "",
-    distance: "",
-    duration: ""
+    vehicleId: 0,
+    locationFromId: 0,
+    locationToId: 1,
+    distance: 190162.012578476,
+    duration: 8640
   },
   {
     id: 1,
-    carId: "",
-    locationFromId: "",
-    locationToId: "",
-    distance: "",
-    duration: ""
+    vehicleId: 0,
+    locationFromId: 1,
+    locationToId: 2,
+    distance: 1648.596667861,
+    duration: 180
   },
   {
     id: 2,
-    carId: "",
-    locationFromId: "",
-    locationToId: "",
-    distance: "",
-    duration: ""
+    vehicleId: 0,
+    locationFromId: 2,
+    locationToId: 3,
+    distance: 53.19274487,
+    duration: 0
   },
   {
     id: 3,
-    carId: "",
-    locationFromId: "",
-    locationToId: "",
-    distance: "",
-    duration: ""
+    vehicleId: 0,
+    locationFromId: 3,
+    locationToId: 0,
+    distance: 190829.035818777,
+    duration: 8700
   },
   {
     id: 4,
-    carId: "",
-    locationFromId: "",
-    locationToId: "",
-    distance: "",
-    duration: ""
+    vehicleId: 1,
+    locationFromId: 0,
+    locationToId: 6,
+    distance: 198479.171007548,
+    duration: 8700
   },
   {
     id: 5,
-    carId: "",
-    locationFromId: "",
-    locationToId: "",
-    distance: "",
-    duration: ""
+    vehicleId: 1,
+    locationFromId: 6,
+    locationToId: 7,
+    distance: 108820.263557334,
+    duration: 5520
+  },
+  {
+    id: 6,
+    vehicleId: 1,
+    locationFromId: 7,
+    locationToId: 0,
+    distance: 300387.376663843,
+    duration: 13500
+  },
+  {
+    id: 7,
+    vehicleId: 2,
+    locationFromId: 0,
+    locationToId: 5,
+    distance: 191669.403569066,
+    duration: 8760
+  },
+  {
+    id: 8,
+    vehicleId: 2,
+    locationFromId: 5,
+    locationToId: 1,
+    distance: 1700.218382256,
+    duration: 180
+  },
+  {
+    id: 9,
+    vehicleId: 2,
+    locationFromId: 1,
+    locationToId: 0,
+    distance: 190162.012578476,
+    duration: 8640
   },
 ];

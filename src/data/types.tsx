@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import { vehicles } from "./data.tsx";
 
 export type TState = {
   locations: TLocation[] | null,
@@ -12,13 +11,13 @@ export const defaultStoreState = {
 }
 
 export enum ELocationType {
-  WAREHOUSE = 0,
-  CROSS_DOCK = 1,
-  CLIENT = 2,
+  WAREHOUSE,
+  CROSS_DOCK,
+  CLIENT,
 }
-export enum EVehicleType {
-  TRUCK = 0,
-  CAR = 1,
+export type TVehicleType = {
+  id: number,
+  name: string
 }
 
 export type TDemand = {
@@ -27,7 +26,6 @@ export type TDemand = {
 }
 
 export type TTimeWindow = {
-  id: number,
   from: number,
   to: number
 }
@@ -50,13 +48,29 @@ export type TLocation = {
   demands: TDemand[],
 }
 
+export type TRoute = {
+  id: number,
+  vehicleId: number,
+  points: Poi[]
+}
+
 export type TVehicle = {
   id: number,
-  number: string,
-  vehicleType: EVehicleType,
+  vehicleType: TVehicleType,
   capacity: number[],
   timeWindows: TTimeWindow[],
   penaltyCapacityOverload: number,
   penaltyMaxCapacityOverload: number,
   penaltyOverwork: number,
+}
+
+
+
+export type TDistance = {
+  id: number,
+  vehicleId: number,
+  locationFromId: number,
+  locationToId: number,
+  distance: number,
+  duration: number
 }
