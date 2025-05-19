@@ -5,7 +5,6 @@ import './MainLocations.scss';
 import { locations } from "../../data/data.tsx";
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration'
-import { ELocationType } from "../../data/types.tsx";
 
 dayjs.extend(duration);
 
@@ -62,7 +61,7 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
           })}/>
       </label>
       <ul className="main-locations__list">
-        {searchedLocations.map((el) => {
+        {searchedLocations.map((el, index) => {
           const isActive = el.id === activeLocation;
           const itemRef = isActive ? (el: HTMLLIElement | null) => {
             if (el) {
@@ -72,7 +71,7 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
 
           return <li
             onClick={() => onLocationClick(null, el.id)}
-            key={el.id}
+            key={index}
             className={el.id === activeLocation
               ? "main-locations__list-item main-locations__list-item--active"
               : "main-locations__list-item"
@@ -80,17 +79,17 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
             <div className="main-locations__list-item__header">
               <h3 className="main-locations__list-item__header-title">Location ID: {el.id}</h3>
               <div>
-                {el.timeWindows.map(({ id, from, to }) => {
-                  return <p key={id} className="main-locations__list-item__header-window">
+                {el.timeWindows.map(({ id, from, to }, index) => {
+                  return <p key={index} className="main-locations__list-item__header-window">
                     {dayjs.duration(from, 'seconds').format("HH:MM")} - {dayjs.duration(to, 'seconds').format("HH:MM")}
                   </p>
                 })}
               </div>
             </div>
-            {el.type === ELocationType.CLIENT && <p
+            {el.type.id === 2 && <p
               className="main-locations__list-item__info">Demands: {el.demands.map(({ demand }) => demand).join(', ')}</p>}
             <p className="main-locations__list-item__info">Service
-              time: {dayjs.duration(el.serviceTime, 'seconds').minutes()} min</p>
+              time: {dayjs.duration(el.serviceTime, 'seconds').minutes()}min</p>
             <div className="main-locations__list-item__footer">
               <div className="main-locations__list-item__footer-coordinates">
                 <div className="main-locations__list-item__footer-coordinates__icon-container">

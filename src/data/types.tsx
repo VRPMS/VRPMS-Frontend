@@ -10,11 +10,11 @@ export const defaultStoreState = {
   locations: null,
 }
 
-export enum ELocationType {
-  WAREHOUSE,
-  CROSS_DOCK,
-  CLIENT,
+export type TLocationType = {
+  id: number,
+  name: string
 }
+
 export type TVehicleType = {
   id: number,
   name: string
@@ -32,13 +32,13 @@ export type TTimeWindow = {
 
 export type Poi = {
   id: number,
-  type: ELocationType,
+  type: TLocationType,
   location: google.maps.LatLngLiteral
 }
 
 export type TLocation = {
   id: number;
-  type: ELocationType;
+  type: TLocationType;
   longitude: number;
   latitude: number;
   serviceTime: number;

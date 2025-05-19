@@ -7,7 +7,7 @@ import { colors, locations, pointDefault, points, routes, vehicles } from "../..
 import warehousePNG from '../../assets/images/warehouse.png';
 import crossdockPNG from '../../assets/images/crossdock.png';
 import pointPNG from '../../assets/images/point.png';
-import { ELocationType, Poi, TVehicle } from "../../data/types.tsx";
+import { Poi, TVehicle } from "../../data/types.tsx";
 import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -33,9 +33,9 @@ function MainPage() {
 
   const drawRoute = (routePoints: Poi[], index: number) => {
     if (routePoints.length < 2) return;
-    const origin = routePoints.find(el => el.type === ELocationType.WAREHOUSE)?.location ?? pointDefault.location;
-    const destination = routePoints.find(el => el.type === ELocationType.WAREHOUSE)?.location ?? pointDefault.location;
-    const waypoints = routePoints.filter(el => el.type !== ELocationType.WAREHOUSE).map(p => ({
+    const origin = routePoints.find(el => el.type.id === 0)?.location ?? pointDefault.location;
+    const destination = routePoints.find(el => el.type.id === 0)?.location ?? pointDefault.location;
+    const waypoints = routePoints.filter(el => el.type.id !== 0).map(p => ({
       location: p.location,
       stopover: true
     }));
@@ -142,7 +142,7 @@ function MainPage() {
     const infoWindow = new google.maps.InfoWindow({
       content: `<div class="main-map__map__info-window">
       <h3>Location ID: ${location.id}</h3>
-      <p>Type: ${location.type === 0 ? 'warehouse' : location.type === 1 ? 'cross-dock' : 'client'}</p>
+      <p>Type: ${location.type.id === 0 ? 'warehouse' : location.type.id === 1 ? 'cross-dock' : 'client'}</p>
       <p>Point: ${location.latitude}, ${location.longitude}</p>
     </div>`
     });
@@ -287,7 +287,7 @@ function MainPage() {
             defaultCenter={{ lat: Number(locations[0].latitude), lng: Number(locations[0].longitude) }}>
             <>
               {points.map((poi: Poi) => {
-                const icon = poi.type === ELocationType.WAREHOUSE ? warehousePNG : poi.type === ELocationType.CROSS_DOCK ? crossdockPNG : pointPNG;
+                const icon = poi.type.id === 0 ? warehousePNG : poi.type.id === 1 ? crossdockPNG : pointPNG;
                 return <AdvancedMarker
                   key={poi.id}
                   position={poi.location}

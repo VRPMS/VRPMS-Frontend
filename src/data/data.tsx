@@ -1,5 +1,5 @@
 import outlinedSvg from '../assets/outlined.svg';
-import { ELocationType, Poi, TDistance, TLocation, TRoute, TVehicle } from "./types.tsx";
+import { Poi, TDistance, TLocation, TLocationType, TRoute, TVehicle, TVehicleType } from "./types.tsx";
 
 export const links = [
   {
@@ -31,7 +31,10 @@ export const links = [
 export const locations: TLocation[] = [
   {
     id: 0,
-    type: ELocationType.WAREHOUSE,
+    type: {
+      id: 0,
+      name: "warehouse"
+    },
     longitude: 28.7130344,
     latitude: 50.269126,
     serviceTime: 300,
@@ -56,7 +59,10 @@ export const locations: TLocation[] = [
   },
   {
     id: 1,
-    type: ELocationType.CROSS_DOCK,
+    type: {
+      id: 1,
+      name: "cross-dock"
+    },
     longitude: 26.2855705,
     latitude: 50.6193914,
     serviceTime: 300,
@@ -81,7 +87,10 @@ export const locations: TLocation[] = [
   },
   {
     id: 2,
-    type: ELocationType.CLIENT,
+    type: {
+    id: 2,
+    name: "client"
+  },
     longitude: 26.2748028,
     latitude: 50.6152662,
     serviceTime: 300,
@@ -106,7 +115,10 @@ export const locations: TLocation[] = [
   },
   {
     id: 3,
-    type: ELocationType.CLIENT,
+    type: {
+    id: 2,
+    name: "client"
+  },
     longitude: 26.2754707,
     latitude: 50.6152946,
     serviceTime: 300,
@@ -131,7 +143,10 @@ export const locations: TLocation[] = [
   },
   {
     id: 4,
-    type: ELocationType.CLIENT,
+    type: {
+    id: 2,
+    name: "client"
+  },
     longitude: 26.2752341,
     latitude: 50.6152333,
     serviceTime: 300,
@@ -156,7 +171,10 @@ export const locations: TLocation[] = [
   },
   {
     id: 5,
-    type: ELocationType.CLIENT,
+    type: {
+    id: 2,
+    name: "client"
+  },
     longitude: 26.2846243,
     latitude: 50.6297512,
     serviceTime: 300,
@@ -181,7 +199,10 @@ export const locations: TLocation[] = [
   },
   {
     id: 6, //27
-    type: ELocationType.CLIENT,
+    type: {
+    id: 2,
+    name: "client"
+  },
     longitude: 27.2195519,
     latitude: 51.2703183,
     serviceTime: 300,
@@ -206,7 +227,10 @@ export const locations: TLocation[] = [
   },
   {
     id: 7, //28
-    type: ELocationType.CLIENT,
+    type: {
+    id: 2,
+    name: "client"
+  },
     longitude: 25.8569188,
     latitude: 51.3399703,
     serviceTime: 300,
@@ -244,7 +268,10 @@ export const points: Poi[] = locations.map(el => {
 
 export const pointDefault = {
   id: 0,
-  type: ELocationType.CLIENT,
+  type: {
+      id: 2,
+      name: "client"
+    },
   location: {
     lat: 0,
     lng: 0
@@ -412,3 +439,25 @@ export const distances: TDistance[] = [
     duration: 8640
   },
 ];
+
+export const locationTypes: TLocationType[] = [
+  {
+    id: 0,
+    name: "warehouse"
+  },
+  {
+    id: 1,
+    name: "cross-dock"
+  },
+  {
+    id: 2,
+    name: "client"
+  },
+]
+
+export const vehicleTypes: TVehicleType[] = [
+  {
+    id: 0,
+    name: "Truck"
+  },
+]
