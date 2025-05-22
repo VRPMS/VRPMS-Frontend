@@ -88,9 +88,9 @@ export const locations: TLocation[] = [
   {
     id: 2,
     type: {
-    id: 2,
-    name: "client"
-  },
+      id: 2,
+      name: "client"
+    },
     longitude: 26.2748028,
     latitude: 50.6152662,
     serviceTime: 300,
@@ -116,9 +116,9 @@ export const locations: TLocation[] = [
   {
     id: 3,
     type: {
-    id: 2,
-    name: "client"
-  },
+      id: 2,
+      name: "client"
+    },
     longitude: 26.2754707,
     latitude: 50.6152946,
     serviceTime: 300,
@@ -144,9 +144,9 @@ export const locations: TLocation[] = [
   {
     id: 4,
     type: {
-    id: 2,
-    name: "client"
-  },
+      id: 2,
+      name: "client"
+    },
     longitude: 26.2752341,
     latitude: 50.6152333,
     serviceTime: 300,
@@ -172,9 +172,9 @@ export const locations: TLocation[] = [
   {
     id: 5,
     type: {
-    id: 2,
-    name: "client"
-  },
+      id: 2,
+      name: "client"
+    },
     longitude: 26.2846243,
     latitude: 50.6297512,
     serviceTime: 300,
@@ -200,9 +200,9 @@ export const locations: TLocation[] = [
   {
     id: 6, //27
     type: {
-    id: 2,
-    name: "client"
-  },
+      id: 2,
+      name: "client"
+    },
     longitude: 27.2195519,
     latitude: 51.2703183,
     serviceTime: 300,
@@ -228,9 +228,9 @@ export const locations: TLocation[] = [
   {
     id: 7, //28
     type: {
-    id: 2,
-    name: "client"
-  },
+      id: 2,
+      name: "client"
+    },
     longitude: 25.8569188,
     latitude: 51.3399703,
     serviceTime: 300,
@@ -255,6 +255,91 @@ export const locations: TLocation[] = [
   },
 ];
 
+
+// defaults
+export const locationDefault: TLocation = {
+  id: 0,
+  type: {
+    id: 0,
+    name: ""
+  },
+  longitude: 0,
+  latitude: 0,
+  serviceTime: 0,
+  penaltyLate: 0,
+  penaltyWait: 0,
+  timeWindows: [
+    {
+      from: 0,
+      to: 0,
+    }
+  ],
+  demands: [
+    {
+      id: 0,
+      demand: 0,
+    },
+  ],
+}
+
+export const pointDefault: Poi = {
+  id: 0,
+  type: {
+    id: 0,
+    name: ""
+  },
+  location: {
+    lat: 0,
+    lng: 0
+  }
+}
+
+export const vehicleDefault: TVehicle = {
+  id: 0,
+  vehicleType: {
+    id: 0,
+    name: ""
+  },
+  capacity: [0],
+  maxCapacity: [0],
+  timeWindows: [
+    {
+      from: 0,
+      to: 0
+    }
+  ],
+  penaltyCapacityOverload: 0,
+  penaltyMaxCapacityOverload: 0,
+  penaltyOverwork: 0,
+}
+
+export const distanceDefault: TDistance = {
+  id: 0,
+  vehicleId: 0,
+  locationFromId: 0,
+  locationToId: 0,
+  distance: 0,
+  duration: 0
+}
+
+export const routeDefault: TRoute = {
+  id: 0,
+  vehicleId: 0,
+  points: [pointDefault]
+}
+
+export const locationTypeDefault: TLocationType = {
+  id: 0,
+  name: ""
+}
+
+export const vehicleTypeDefault: TVehicleType = {
+  id: 0,
+  name: ""
+}
+
+
+// data
 export const points: Poi[] = locations.map(el => {
   return {
     id: el.id,
@@ -265,18 +350,6 @@ export const points: Poi[] = locations.map(el => {
     }
   }
 });
-
-export const pointDefault = {
-  id: 0,
-  type: {
-      id: 2,
-      name: "client"
-    },
-  location: {
-    lat: 0,
-    lng: 0
-  }
-}
 
 export const routes: TRoute[] = [
   {
@@ -308,9 +381,10 @@ export const vehicles: TVehicle[] = [
     id: 0,
     vehicleType: {
       id: 0,
-      name: "Truck"
+      name: "truck"
     },
     capacity: [40, 20],
+    maxCapacity: [40, 20],
     timeWindows: [
       {
         from: 28800,
@@ -325,9 +399,10 @@ export const vehicles: TVehicle[] = [
     id: 1,
     vehicleType: {
       id: 0,
-      name: "Truck"
+      name: "truck"
     },
     capacity: [40, 20],
+    maxCapacity: [40, 20],
     timeWindows: [
       {
         from: 28800,
@@ -342,9 +417,10 @@ export const vehicles: TVehicle[] = [
     id: 2,
     vehicleType: {
       id: 0,
-      name: "Truck"
+      name: "truck"
     },
     capacity: [40, 20],
+    maxCapacity: [40, 20],
     timeWindows: [
       {
         from: 28800,
@@ -458,6 +534,6 @@ export const locationTypes: TLocationType[] = [
 export const vehicleTypes: TVehicleType[] = [
   {
     id: 0,
-    name: "Truck"
+    name: "truck"
   },
 ]

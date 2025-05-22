@@ -1,13 +1,35 @@
 import { Dispatch, SetStateAction } from "react";
+import {
+  distanceDefault,
+  locationDefault,
+  locationTypeDefault,
+  pointDefault,
+  routeDefault,
+  vehicleDefault, vehicleTypeDefault
+} from "./data.tsx";
 
 export type TState = {
-  locations: TLocation[] | null,
+  locations: TLocation[],
+  vehicles: TVehicle[],
+  distances: TDistance[],
+  locationTypes: TLocationType[],
+  vehicleTypes: TVehicleType[],
+  routes: TRoute[],
+  points: Poi[],
+  dataLoaded: boolean
 }
 
 export type SetState = Dispatch<SetStateAction<TState>>;
 
 export const defaultStoreState = {
-  locations: null,
+  locations: [locationDefault],
+  vehicles: [vehicleDefault],
+  distances: [distanceDefault],
+  routes: [routeDefault],
+  locationTypes: [locationTypeDefault],
+  vehicleTypes: [vehicleTypeDefault],
+  points: [pointDefault],
+  dataLoaded: false
 }
 
 export type TLocationType = {
@@ -58,12 +80,12 @@ export type TVehicle = {
   id: number,
   vehicleType: TVehicleType,
   capacity: number[],
+  maxCapacity: number[],
   timeWindows: TTimeWindow[],
   penaltyCapacityOverload: number,
   penaltyMaxCapacityOverload: number,
   penaltyOverwork: number,
 }
-
 
 
 export type TDistance = {

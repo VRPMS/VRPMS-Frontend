@@ -66,21 +66,21 @@
   font-weight: 700;
   background-color: #FFFFFFB2;
   border-radius: 8px;
-  border: 1.5px solid transparent;
+  border: 2px solid transparent;
 
-  transition-property: background-color, border;
+  transition-property: background-color, border-color;
   transition-timing-function: ease-out;
   transition-duration: 150ms;
 
   &:hover {
     cursor: pointer;
     background-color: #FFFFFF;
-    border: 1.5px solid #262626;
+    border-color: #262626;
   }
 
   &--active {
     background-color: #FFFFFF;
-    border: 1.5px solid #262626;
+    border-color: #262626;
   }
 }
 

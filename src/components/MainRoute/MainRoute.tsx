@@ -4,7 +4,7 @@ import routeActivePointIcon from '../../assets/route-active-point.png';
 import './MainRoute.scss';
 import { useEffect, useState } from "react";
 import { TDistance, TRoute } from "../../data/types.tsx";
-import { distances, routes} from "../../data/data.tsx";
+import { distances, routes } from "../../data/data.tsx";
 import { NavLink } from "react-router-dom";
 import { paths } from "../../routes/routes.tsx";
 import outlinedSvg from "../../assets/outlined.svg";
@@ -33,11 +33,11 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
   }, [route, distances]);
 
   const getDistance = (index: number, array: any) => {
-    const tempDistance = routeDistances.find(item=>item.locationToId === array[index].id && item.locationFromId === array[index-1].id)?.distance;
+    const tempDistance = routeDistances.find(item => item.locationToId === array[index].id && item.locationFromId === array[index - 1].id)?.distance;
 
     const km = Math.floor(tempDistance / 1000);
     const m = Math.round(tempDistance % 1000);
-    return `${km} km ${m ? m+' m' : ""}`
+    return `${km ? km + ' km' : ""} ${m ? m + ' m' : ""}`
 
   }
 
@@ -53,7 +53,8 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
                 <use href={`${outlinedSvg}#arrow-link`}/>
               </svg>
             </NavLink>
-            <p className="main-route__route-info__header__subtitle">Trip duration: {dayjs.duration(tripDuration, 'seconds').hours()} h {dayjs.duration(tripDuration, 'seconds').minutes()} min</p>
+            <p className="main-route__route-info__header__subtitle">Trip
+              duration: {dayjs.duration(tripDuration, 'seconds').hours()} h {dayjs.duration(tripDuration, 'seconds').minutes()} min</p>
             <div className="main-route__route-info__list">
               <ul className="main-route__route-info__list-content">
                 {route?.points.map((el, index, array) => {
@@ -80,7 +81,8 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
                     <div className="main-route__route-info__list-item__info">
                       <h4 className="main-route__route-info__list-item__info-header">Location ID: {el?.id}</h4>
                       {index ? (
-                        <p className="main-route__route-info__list-item__info-text">Distance to location: {getDistance(index, array)}</p>) : ""}
+                        <p className="main-route__route-info__list-item__info-text">Distance to
+                          location: {getDistance(index, array)}</p>) : ""}
                     </div>
                   </li>
                 })}

@@ -3,7 +3,7 @@ import { JSX, ReactNode, useEffect, useRef, useState } from "react";
 import MainLocations from "../../components/MainLocations/MainLocations.tsx";
 import MainRoute from "../../components/MainRoute/MainRoute.tsx";
 import { AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
-import { colors, locations, pointDefault, points, routes, vehicles } from "../../data/data.tsx";
+import { colors, pointDefault  } from "../../data/data.tsx";
 import warehousePNG from '../../assets/images/warehouse.png';
 import crossdockPNG from '../../assets/images/crossdock.png';
 import pointPNG from '../../assets/images/point.png';
@@ -14,6 +14,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import TextField from '@mui/material/TextField';
 import { Checkbox } from "@mui/material";
 import outlinedSvg from "../../assets/outlined.svg";
+import { useStore } from "../../store/store.tsx";
 
 type TPolylineRef = {
   routeId: number,
@@ -21,6 +22,7 @@ type TPolylineRef = {
 }
 
 function MainPage() {
+  const [{ locations, points, routes, vehicles }] = useStore();
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activeLocation, setActiveLocation] = useState<number | null>(null);
   const [activeRoute, setActiveRoute] = useState<number | null>(null);
@@ -77,6 +79,8 @@ function MainPage() {
     if (!map) return;
 
     polylinesRef.current = [];
+
+    //TODO checking if routes are not null
     routes.forEach((route, index) => drawRoute(route.points, index));
 
     const mapClickListener = map.addListener('click', () => {
@@ -131,7 +135,8 @@ function MainPage() {
     if (!map) return;
 
     const marker = markerRefs.current[pointId.toString()];
-    const location = locations.find(el => el.id === pointId);
+    //TODO locations if routes are not null
+    const location = locations?.find(el => el.id === pointId);
     if (!marker || !location) return;
 
     if (infoWindowRef.current) {
@@ -186,7 +191,7 @@ function MainPage() {
             setSelectedVehicles(newValue ?? []);
           }}
           value={selectedVehicles}
-          getOptionLabel={(option) => option?.number}
+          getOptionLabel={(option) => "Vehicle ID: " + option?.id.toString()}
           renderOption={(props, option, { selected }) => {
             const { key, ...optionProps } = props;
             return (
@@ -197,7 +202,7 @@ function MainPage() {
                   style={{ marginRight: 8 }}
                   checked={selected}
                 />
-                {option?.number}
+                Vehicle ID: {option?.id.toString()}
               </li> as ReactNode
             );
           }}

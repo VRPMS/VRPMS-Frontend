@@ -6,6 +6,8 @@ const StoreContext = createContext<[TState, SetState]|undefined>(undefined);
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<TState>(defaultStoreState);
 
+  //TODO add all data to store
+
   return <StoreContext.Provider value={[state, setState]}>
     {children}
   </StoreContext.Provider>
