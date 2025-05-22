@@ -1,12 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import {
-  distanceDefault,
-  locationDefault,
-  locationTypeDefault,
-  pointDefault,
-  routeDefault,
-  vehicleDefault, vehicleTypeDefault
-} from "./data.tsx";
 
 export type TState = {
   locations: TLocation[],
@@ -16,25 +8,15 @@ export type TState = {
   vehicleTypes: TVehicleType[],
   routes: TRoute[],
   points: Poi[],
-  dataLoaded: boolean
+  dataLoaded: boolean,
+  isLoading: boolean
 }
 
 export type SetState = Dispatch<SetStateAction<TState>>;
 
-export const defaultStoreState = {
-  locations: [locationDefault],
-  vehicles: [vehicleDefault],
-  distances: [distanceDefault],
-  routes: [routeDefault],
-  locationTypes: [locationTypeDefault],
-  vehicleTypes: [vehicleTypeDefault],
-  points: [pointDefault],
-  dataLoaded: false
-}
-
 export type TLocationType = {
-  id: number,
-  name: string
+  typeId: number,
+  typeName: string
 }
 
 export type TVehicleType = {
@@ -43,27 +25,28 @@ export type TVehicleType = {
 }
 
 export type TDemand = {
-  id: number,
-  demand: number
+  demandId: number,
+  demandName: string,
+  demandValue: number
 }
 
 export type TTimeWindow = {
-  from: number,
-  to: number
+  windowStart: string,
+  windowEnd: string
 }
 
 export type Poi = {
   id: number,
-  type: TLocationType,
+  pointType: TLocationType,
   location: google.maps.LatLngLiteral
 }
 
 export type TLocation = {
   id: number;
-  type: TLocationType;
+  pointType: TLocationType;
   longitude: number;
   latitude: number;
-  serviceTime: number;
+  serviceTime: string;
   penaltyLate: number;
   penaltyWait: number;
   timeWindows: TTimeWindow[],

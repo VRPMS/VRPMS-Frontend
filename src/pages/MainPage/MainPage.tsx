@@ -3,7 +3,7 @@ import { JSX, ReactNode, useEffect, useRef, useState } from "react";
 import MainLocations from "../../components/MainLocations/MainLocations.tsx";
 import MainRoute from "../../components/MainRoute/MainRoute.tsx";
 import { AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
-import { colors, pointDefault  } from "../../data/data.tsx";
+import { colors, pointDefault } from "../../data/data.tsx";
 import warehousePNG from '../../assets/images/warehouse.png';
 import crossdockPNG from '../../assets/images/crossdock.png';
 import pointPNG from '../../assets/images/point.png';
@@ -35,9 +35,9 @@ function MainPage() {
 
   const drawRoute = (routePoints: Poi[], index: number) => {
     if (routePoints.length < 2) return;
-    const origin = routePoints.find(el => el.type.id === 0)?.location ?? pointDefault.location;
-    const destination = routePoints.find(el => el.type.id === 0)?.location ?? pointDefault.location;
-    const waypoints = routePoints.filter(el => el.type.id !== 0).map(p => ({
+    const origin = routePoints.find(el => el?.pointType.typeId === 0)?.location ?? pointDefault.location;
+    const destination = routePoints.find(el => el?.pointType.typeId === 0)?.location ?? pointDefault.location;
+    const waypoints = routePoints.filter(el => el?.pointType.typeId !== 0).map(p => ({
       location: p.location,
       stopover: true
     }));
@@ -80,7 +80,6 @@ function MainPage() {
 
     polylinesRef.current = [];
 
-    //TODO checking if routes are not null
     routes.forEach((route, index) => drawRoute(route.points, index));
 
     const mapClickListener = map.addListener('click', () => {
@@ -135,7 +134,6 @@ function MainPage() {
     if (!map) return;
 
     const marker = markerRefs.current[pointId.toString()];
-    //TODO locations if routes are not null
     const location = locations?.find(el => el.id === pointId);
     if (!marker || !location) return;
 
@@ -147,7 +145,7 @@ function MainPage() {
     const infoWindow = new google.maps.InfoWindow({
       content: `<div class="main-map__map__info-window">
       <h3>Location ID: ${location.id}</h3>
-      <p>Type: ${location.type.id === 0 ? 'warehouse' : location.type.id === 1 ? 'cross-dock' : 'client'}</p>
+      <p>Type: ${location.pointType.typeId === 0 ? 'warehouse' : location.pointType.typeId === 1 ? 'cross-dock' : 'client'}</p>
       <p>Point: ${location.latitude}, ${location.longitude}</p>
     </div>`
     });
@@ -291,8 +289,8 @@ function MainPage() {
             defaultZoom={7}
             defaultCenter={{ lat: Number(locations[0].latitude), lng: Number(locations[0].longitude) }}>
             <>
-              {points.map((poi: Poi) => {
-                const icon = poi.type.id === 0 ? warehousePNG : poi.type.id === 1 ? crossdockPNG : pointPNG;
+              {points?.map((poi: Poi) => {
+                const icon = poi.pointType.typeId === 1 ? warehousePNG : poi.pointType.typeId === 2 ? crossdockPNG : pointPNG;
                 return <AdvancedMarker
                   key={poi.id}
                   position={poi.location}

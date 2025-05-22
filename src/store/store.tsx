@@ -1,12 +1,11 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { defaultStoreState, SetState, TState } from "../data/types.tsx";
+import { SetState, TState } from "../data/types.tsx";
+import { defaultStoreState } from "../data/data.tsx";
 
 const StoreContext = createContext<[TState, SetState]|undefined>(undefined);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<TState>(defaultStoreState);
-
-  //TODO add all data to store
 
   return <StoreContext.Provider value={[state, setState]}>
     {children}

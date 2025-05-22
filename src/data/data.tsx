@@ -31,225 +31,241 @@ export const links = [
 export const locations: TLocation[] = [
   {
     id: 0,
-    type: {
-      id: 0,
-      name: "warehouse"
+    pointType: {
+      typeId: 0,
+      typeName: "warehouse"
     },
     longitude: 28.7130344,
     latitude: 50.269126,
-    serviceTime: 300,
+    serviceTime: "00:00:00",
     penaltyLate: 0,
     penaltyWait: 5000,
     timeWindows: [
       {
-        from: 28800,
-        to: 46800,
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00",
       }
     ],
     demands: [
       {
-        id: 0,
-        demand: 0,
+        demandId: 0,
+        demandValue: 0,
+        demandName: "",
       },
       {
-        id: 1,
-        demand: 0,
+        demandId: 1,
+        demandValue: 0,
+        demandName: "",
       },
     ],
   },
   {
     id: 1,
-    type: {
-      id: 1,
-      name: "cross-dock"
+    pointType: {
+      typeId: 1,
+      typeName: "cross-dock"
     },
     longitude: 26.2855705,
     latitude: 50.6193914,
-    serviceTime: 300,
+    serviceTime: "00:00:00",
     penaltyLate: 0,
     penaltyWait: 5000,
     timeWindows: [
       {
-        from: 28800,
-        to: 46800,
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00",
       }
     ],
     demands: [
       {
-        id: 0,
-        demand: 0,
+        demandId: 0,
+        demandValue: 0,
+        demandName: "",
       },
       {
-        id: 1,
-        demand: 0,
+        demandId: 1,
+        demandValue: 0,
+        demandName: "",
       },
     ],
   },
   {
     id: 2,
-    type: {
-      id: 2,
-      name: "client"
+    pointType: {
+      typeId: 2,
+      typeName: "client"
     },
     longitude: 26.2748028,
     latitude: 50.6152662,
-    serviceTime: 300,
+    serviceTime: "00:00:00",
     penaltyLate: 0,
     penaltyWait: 5000,
     timeWindows: [
       {
-        from: 28800,
-        to: 46800,
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00",
       }
     ],
     demands: [
       {
-        id: 0,
-        demand: 0.66,
+        demandId: 0,
+        demandValue: 0.66,
+        demandName: "",
       },
       {
-        id: 1,
-        demand: 1,
+        demandId: 1,
+        demandValue: 1,
+        demandName: "",
       },
     ],
   },
   {
     id: 3,
-    type: {
-      id: 2,
-      name: "client"
+    pointType: {
+      typeId: 2,
+      typeName: "client"
     },
     longitude: 26.2754707,
     latitude: 50.6152946,
-    serviceTime: 300,
+    serviceTime: "00:00:00",
     penaltyLate: 0,
     penaltyWait: 5000,
     timeWindows: [
       {
-        from: 28800,
-        to: 46800,
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00",
       }
     ],
     demands: [
       {
-        id: 0,
-        demand: 2.33,
+        demandId: 0,
+        demandValue: 2.33,
+        demandName: "",
       },
       {
-        id: 1,
-        demand: 1,
+        demandId: 1,
+        demandValue: 1,
+        demandName: "",
       },
     ],
   },
   {
     id: 4,
-    type: {
-      id: 2,
-      name: "client"
+    pointType: {
+      typeId: 2,
+      typeName: "client"
     },
     longitude: 26.2752341,
     latitude: 50.6152333,
-    serviceTime: 300,
+    serviceTime: "00:00:00",
     penaltyLate: 0,
     penaltyWait: 5000,
     timeWindows: [
       {
-        from: 28800,
-        to: 46800,
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00",
       }
     ],
     demands: [
       {
-        id: 0,
-        demand: 0.86,
+        demandId: 0,
+        demandValue: 0.86,
+        demandName: "",
       },
       {
-        id: 1,
-        demand: 1,
+        demandId: 1,
+        demandValue: 1,
+        demandName: "",
       },
     ],
   },
   {
     id: 5,
-    type: {
-      id: 2,
-      name: "client"
+    pointType: {
+      typeId: 2,
+      typeName: "client"
     },
     longitude: 26.2846243,
     latitude: 50.6297512,
-    serviceTime: 300,
+    serviceTime: "00:00:00",
     penaltyLate: 0,
     penaltyWait: 5000,
     timeWindows: [
       {
-        from: 28800,
-        to: 46800,
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00",
       }
     ],
     demands: [
       {
-        id: 0,
-        demand: 6.07,
+        demandId: 0,
+        demandValue: 6.07,
+        demandName: "",
       },
       {
-        id: 1,
-        demand: 1,
+        demandId: 1,
+        demandValue: 1,
+        demandName: "",
       },
     ],
   },
   {
     id: 6, //27
-    type: {
-      id: 2,
-      name: "client"
+    pointType: {
+      typeId: 2,
+      typeName: "client"
     },
     longitude: 27.2195519,
     latitude: 51.2703183,
-    serviceTime: 300,
+    serviceTime: "00:00:00",
     penaltyLate: 0,
     penaltyWait: 5000,
     timeWindows: [
       {
-        from: 28800,
-        to: 46800,
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00",
       }
     ],
     demands: [
       {
-        id: 0,
-        demand: 0.51,
+        demandId: 0,
+        demandValue: 0.51,
+        demandName: "",
       },
       {
-        id: 1,
-        demand: 1,
+        demandId: 1,
+        demandValue: 1,
+        demandName: "",
       },
     ],
   },
   {
     id: 7, //28
-    type: {
-      id: 2,
-      name: "client"
+    pointType: {
+      typeId: 2,
+      typeName: "client"
     },
     longitude: 25.8569188,
     latitude: 51.3399703,
-    serviceTime: 300,
+    serviceTime: "00:00:00",
     penaltyLate: 0,
     penaltyWait: 5000,
     timeWindows: [
       {
-        from: 28800,
-        to: 46800,
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00",
       }
     ],
     demands: [
       {
-        id: 0,
-        demand: 1.05,
+        demandId: 0,
+        demandValue: 1.05,
+        demandName: "",
       },
       {
-        id: 1,
-        demand: 1,
+        demandId: 1,
+        demandValue: 1,
+        demandName: "",
       },
     ],
   },
@@ -259,34 +275,35 @@ export const locations: TLocation[] = [
 // defaults
 export const locationDefault: TLocation = {
   id: 0,
-  type: {
-    id: 0,
-    name: ""
+  pointType: {
+    typeId: 0,
+    typeName: ""
   },
   longitude: 0,
   latitude: 0,
-  serviceTime: 0,
+  serviceTime: "00:00:00",
   penaltyLate: 0,
   penaltyWait: 0,
   timeWindows: [
     {
-      from: 0,
-      to: 0,
+      windowStart: "00:00:00",
+      windowEnd: "00:00:00",
     }
   ],
   demands: [
     {
-      id: 0,
-      demand: 0,
+      demandId: 0,
+      demandName: "",
+      demandValue: 0,
     },
   ],
 }
 
 export const pointDefault: Poi = {
   id: 0,
-  type: {
-    id: 0,
-    name: ""
+  pointType: {
+    typeId: 0,
+    typeName: ""
   },
   location: {
     lat: 0,
@@ -304,8 +321,8 @@ export const vehicleDefault: TVehicle = {
   maxCapacity: [0],
   timeWindows: [
     {
-      from: 0,
-      to: 0
+      windowStart: "00:00:00",
+      windowEnd: "00:00:00"
     }
   ],
   penaltyCapacityOverload: 0,
@@ -329,12 +346,12 @@ export const routeDefault: TRoute = {
 }
 
 export const locationTypeDefault: TLocationType = {
-  id: 0,
-  name: ""
+  typeId: 0,
+  typeName: ""
 }
 
 export const vehicleTypeDefault: TVehicleType = {
-  id: 0,
+  id: -1,
   name: ""
 }
 
@@ -343,7 +360,7 @@ export const vehicleTypeDefault: TVehicleType = {
 export const points: Poi[] = locations.map(el => {
   return {
     id: el.id,
-    type: el.type,
+    pointType: el.pointType,
     location: {
       lat: Number(el.latitude),
       lng: Number(el.longitude)
@@ -387,8 +404,8 @@ export const vehicles: TVehicle[] = [
     maxCapacity: [40, 20],
     timeWindows: [
       {
-        from: 28800,
-        to: 892800
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00"
       }
     ],
     penaltyCapacityOverload: 1000,
@@ -405,8 +422,8 @@ export const vehicles: TVehicle[] = [
     maxCapacity: [40, 20],
     timeWindows: [
       {
-        from: 28800,
-        to: 892800
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00"
       }
     ],
     penaltyCapacityOverload: 1000,
@@ -423,8 +440,8 @@ export const vehicles: TVehicle[] = [
     maxCapacity: [40, 20],
     timeWindows: [
       {
-        from: 28800,
-        to: 892800
+        windowStart: "00:00:00",
+        windowEnd: "00:00:00"
       }
     ],
     penaltyCapacityOverload: 1000,
@@ -518,16 +535,16 @@ export const distances: TDistance[] = [
 
 export const locationTypes: TLocationType[] = [
   {
-    id: 0,
-    name: "warehouse"
+    typeId: 1,
+    typeName: "warehouse"
   },
   {
-    id: 1,
-    name: "cross-dock"
+    typeId: 2,
+    typeName: "cross-dock"
   },
   {
-    id: 2,
-    name: "client"
+    typeId: 3,
+    typeName: "client"
   },
 ]
 
@@ -537,3 +554,16 @@ export const vehicleTypes: TVehicleType[] = [
     name: "truck"
   },
 ]
+
+
+export const defaultStoreState = {
+  locations: [locationDefault],
+  vehicles: [vehicleDefault],
+  distances: [distanceDefault],
+  routes: [routeDefault],
+  locationTypes: [locationTypeDefault],
+  vehicleTypes: [vehicleTypeDefault],
+  points: [pointDefault],
+  dataLoaded: false,
+  isLoading: true
+}

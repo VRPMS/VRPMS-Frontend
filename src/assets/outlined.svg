@@ -80,5 +80,10 @@
       <path stroke="#262626" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18s-4.667-3.833-4.667-7.333a4.666 4.666 0 1 1 9.334 0C16.667 14.167 12 18 12 18Z" clip-rule="evenodd"/>
       <path stroke="#262626" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.999 10.722a.278.278 0 1 0 .002.556.278.278 0 0 0-.002-.556"/>
     </symbol>
+    <symbol id="image-cover" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M18.5 21H6.5C4.843 21 3.5 19.657 3.5 18V6C3.5 4.343 4.843 3 6.5 3H18.5C20.157 3 21.5 4.343 21.5 6V18C21.5 19.657 20.157 21 18.5 21Z" stroke="#323232" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.4874 7.51256C11.1709 8.19598 11.1709 9.30402 10.4874 9.98743C9.80402 10.6709 8.69597 10.6709 8.01256 9.98743C7.32915 9.30402 7.32915 8.19597 8.01256 7.51256C8.69598 6.82915 9.80402 6.82915 10.4874 7.51256" stroke="#323232" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21.5 10.109C21.05 10.045 20.593 10 20.125 10C14.809 10 10.5 14.309 10.5 19.625C10.5 20.093 10.545 20.55 10.609 21" stroke="#323232" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
   </defs>
 </svg>

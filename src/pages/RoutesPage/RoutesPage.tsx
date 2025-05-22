@@ -1,13 +1,14 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { TDistance } from "../../data/types.tsx";
-import { distances, locations, vehicles } from "../../data/data.tsx";
 import outlinedSvg from "../../assets/outlined.svg";
 import '../LocationsPage/LocationsPage.scss';
 import './RoutesPage.scss';
 import dayjs from "dayjs";
+import { useStore } from "../../store/store.tsx";
 
 function RoutesPage() {
+  const [{ locations, distances, vehicles }] = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("query") || "";
   // const [vehicleType, setVehicleType] = useState<number | string>("");
@@ -109,7 +110,7 @@ function RoutesPage() {
             </div>
             <div className="routes__list-item__info routes__list-item__info--small">
               <p className="routes__list-item__info-title">Distance</p>
-              <p className="routes__list-item__info-data">{`${km ? km + ' km' : ""} ${m ? m + ' m' : ""}`}</p>
+              <p className="routes__list-item__info-data">{`${km ? km + ' km' : ''} ${m ? m + ' m' : "0 m"}`}</p>
             </div>
             <div className="routes__list-item__info routes__list-item__info--small">
               <p className="routes__list-item__info-title">Duration</p>

@@ -1,15 +1,16 @@
 import outlinedSvg from "../../assets/outlined.svg";
 import { useSearchParams } from "react-router-dom";
 import { ReactElement, useEffect, useState } from "react";
-import { vehicles, vehicleTypes } from "../../data/data.tsx";
 import { TVehicle } from "../../data/types.tsx";
 import { MenuItem } from "@mui/material";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import '../LocationsPage/LocationsPage.scss';
 import dayjs from "dayjs";
+import { useStore } from "../../store/store.tsx";
 
 function VehiclesPage() {
+  const [{ vehicleTypes, vehicles }] = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("query") || "";
   const [vehicleType, setVehicleType] = useState<number | string>("");
@@ -125,7 +126,7 @@ function VehiclesPage() {
               <div className="locations__list-item__header__icon-container">
                 <svg className="locations__list-item__header__icon" width="40" height="40">
                   <use
-                    href={`${outlinedSvg}#${el.vehicleType.name}`}/>
+                    href={`${outlinedSvg}#${el.vehicleType.name.length!==0 ? el.vehicleType.name : "image-cover"}`}/>
                 </svg>
               </div>
               <div className="locations__list-item__header__info">

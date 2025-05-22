@@ -2,9 +2,11 @@ import { NavLink, useSearchParams } from "react-router-dom";
 import { paths } from "../../routes/routes.tsx";
 import outlinedSvg from '../../assets/outlined.svg';
 import './MainLocations.scss';
-import { locations } from "../../data/data.tsx";
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration'
+import { useStore } from "../../store/store.tsx";
+import { useEffect, useState } from "react";
+import { TLocation } from "../../data/types.tsx";
 
 dayjs.extend(duration);
 
@@ -14,6 +16,7 @@ type TProps = {
 }
 
 function MainLocations({ activeLocation, onLocationClick }: TProps) {
+  const [{ locations }] = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("query") || "";
 
@@ -21,9 +24,10 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
       return (el?.id.toString() && el?.id.toString().includes(query))
         || (el?.longitude.toString() && el?.longitude.toString().includes(query))
         || (el?.latitude && el?.latitude.toString().includes(query))
-        || ("Location ID: "+el?.id).includes(query)
+        || ("Location ID: " + el?.id).includes(query)
     }
   );
+
 
   if (activeLocation !== null) {
     searchedLocations = searchedLocations.sort((a, b) => {
@@ -43,11 +47,6 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
             <use href={`${outlinedSvg}#arrow-link`}/>
           </svg>
         </NavLink>
-        <button className="main-locations__header-button">
-          <svg className="main-locations__header-button__icon" width="24" height="24">
-            <use href={`${outlinedSvg}#add`}/>
-          </svg>
-        </button>
       </div>
       <label className="main-locations__search">
         <svg className="main-locations__search__icon" width="24" height="24">
@@ -75,21 +74,21 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
             className={el.id === activeLocation
               ? "main-locations__list-item main-locations__list-item--active"
               : "main-locations__list-item"
-          }>
+            }>
             <div className="main-locations__list-item__header">
               <h3 className="main-locations__list-item__header-title">Location ID: {el.id}</h3>
               <div>
-                {el.timeWindows.map(({ id, from, to }, index) => {
+                {el.timeWindows.map(({ windowEnd, windowStart }, index) => {
                   return <p key={index} className="main-locations__list-item__header-window">
-                    {dayjs.duration(from, 'seconds').format("HH:MM")} - {dayjs.duration(to, 'seconds').format("HH:MM")}
+                    {dayjs(`2004-01-01T${windowStart}`).format("HH:mm")} - {dayjs(`2004-01-01T${windowEnd}`).format("HH:mm")}
                   </p>
                 })}
               </div>
             </div>
-            {el.type.id === 2 && <p
-              className="main-locations__list-item__info">Demands: {el.demands.map(({ demand }) => demand).join(', ')}</p>}
+            {el.pointType.typeId === 3 && <p
+              className="main-locations__list-item__info">Demands: {el.demands.map(({ demandValue }) => demandValue).join(', ')}</p>}
             <p className="main-locations__list-item__info">Service
-              time: {dayjs.duration(el.serviceTime, 'seconds').minutes()}min</p>
+              time: {dayjs(`2004-01-01T${el.serviceTime}`).minute()} min</p>
             <div className="main-locations__list-item__footer">
               <div className="main-locations__list-item__footer-coordinates">
                 <div className="main-locations__list-item__footer-coordinates__icon-container">

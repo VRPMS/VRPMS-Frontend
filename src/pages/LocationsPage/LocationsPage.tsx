@@ -1,17 +1,18 @@
 import outlinedSvg from "../../assets/outlined.svg";
 import { useSearchParams } from "react-router-dom";
 import { ReactElement, useEffect, useState } from "react";
-import { locations, locationTypes } from "../../data/data.tsx";
 import { TLocation } from "../../data/types.tsx";
 import { MenuItem } from "@mui/material";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import './LocationsPage.scss';
 import dayjs from "dayjs";
+import { useStore } from "../../store/store.tsx";
 
 //TODO add button (arrow) to location card to show it on map
 
 function LocationsPage() {
+  const [{ locations, locationTypes }] = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("query") || "";
   const [locationType, setLocationType] = useState<number | string>("");
@@ -122,81 +123,81 @@ function LocationsPage() {
     </header>
     <div className="locations__list-container">
       <h2 className="locations__list-container__title">Locations</h2>
-        {searchedLocations && <ul className="locations__list">
-          {searchedLocations.map((el, index) => {
-            return <li key={index} className="locations__list-item">
-              <div className="locations__list-item__header">
-                <div className="locations__list-item__header__icon-container">
-                  <svg className="locations__list-item__header__icon" width="40" height="40">
-                    <use
-                      href={`${outlinedSvg}#${el.type.id === 0 ? "warehouse" : el.type.id === 1 ? "cross-dock" : "location"}`}/>
+      {searchedLocations && <ul className="locations__list">
+        {searchedLocations.map((el, index) => {
+          return <li key={index} className="locations__list-item">
+            <div className="locations__list-item__header">
+              <div className="locations__list-item__header__icon-container">
+                <svg className="locations__list-item__header__icon" width="40" height="40">
+                  <use
+                    href={`${outlinedSvg}#${el.type.id === 0 ? "warehouse" : el.type.id === 1 ? "cross-dock" : el.type.id === 2 ? "location" : "image-cover"}`}/>
+                </svg>
+              </div>
+              <div className="locations__list-item__header__info">
+                <h3 className="locations__list-item__header__info-title">Location ID: {el.id}</h3>
+                <p
+                  className="locations__list-item__header__info-subtitle">Type: {el.type.id === 0 ? "warehouse" : el.type.id === 1 ? "cross-dock" : "client"}</p>
+              </div>
+            </div>
+            <div className="locations__list-item__point">
+              <div className="locations__list-item__point-info">
+                <div className="locations__list-item__point__icon-container">
+                  <svg width="18" height="18" className="locations__list-item__point__icon">
+                    <use href={`${outlinedSvg}#clock`}/>
                   </svg>
                 </div>
-                <div className="locations__list-item__header__info">
-                  <h3 className="locations__list-item__header__info-title">Location ID: {el.id}</h3>
-                  <p
-                    className="locations__list-item__header__info-subtitle">Type: {el.type.id === 0 ? "warehouse" : el.type.id === 1 ? "cross-dock" : "client"}</p>
-                </div>
-              </div>
-              <div className="locations__list-item__point">
-                <div className="locations__list-item__point-info">
-                  <div className="locations__list-item__point__icon-container">
-                    <svg width="18" height="18" className="locations__list-item__point__icon">
-                      <use href={`${outlinedSvg}#clock`}/>
-                    </svg>
-                  </div>
-                  <div>
-                    {el.timeWindows.map(({ id, from, to }, index) => {
-                      return <p key={index} className="locations__list-item__point__text">
-                        {dayjs.duration(from, 'seconds').format("HH:MM")} - {dayjs.duration(to, 'seconds').format("HH:MM")}
-                      </p>
-                    })}
-                  </div>
-                </div>
-                <div className="locations__list-item__point-info">
-                  <div className="locations__list-item__point__icon-container">
-                    <svg width="18" height="18" className="locations__list-item__point__icon">
-                      <use href={`${outlinedSvg}#coordinates`}/>
-                    </svg>
-                  </div>
-                  <p className="locations__list-item__point__text">{el.latitude}, {el.longitude}</p>
-                </div>
-              </div>
-              <div className="locations__list-item__features">
-                <div className="locations__list-item__features-info">
-                  <p className="locations__list-item__features-info__title">Demands</p>
-                  <p className="locations__list-item__features-info__value">{el.demands.map(d => d.demand).join(', ')}</p>
-                </div>
-                <div className="locations__list-item__features-info">
-                  <p className="locations__list-item__features-info__title">Service time</p>
-                  <p
-                    className="locations__list-item__features-info__value">{dayjs.duration(el.serviceTime, 'seconds').minutes()}min</p>
-                </div>
-              </div>
-              <div className="locations__list-item__footer">
                 <div>
-                  <p className="locations__list-item__features-title">Penalties</p>
-                  <div className="locations__list-item__features">
-                    <div className="locations__list-item__features-info">
-                      <p className="locations__list-item__features-info__title">Late arrival</p>
-                      <p className="locations__list-item__features-info__value">{el.penaltyLate}</p>
-                    </div>
-                    <div className="locations__list-item__features-info">
-                      <p className="locations__list-item__features-info__title">Waiting</p>
-                      <p className="locations__list-item__features-info__value">{el.penaltyWait}</p>
-                    </div>
+                  {el.timeWindows.map(({ windowEnd, windowStart }, index) => {
+                    return <p key={index} className="locations__list-item__point__text">
+                      {dayjs.duration(windowStart).format("HH:MM")} - {dayjs.duration(windowEnd).format("HH:MM")}
+                    </p>
+                  })}
+                </div>
+              </div>
+              <div className="locations__list-item__point-info">
+                <div className="locations__list-item__point__icon-container">
+                  <svg width="18" height="18" className="locations__list-item__point__icon">
+                    <use href={`${outlinedSvg}#coordinates`}/>
+                  </svg>
+                </div>
+                <p className="locations__list-item__point__text">{el.latitude}, {el.longitude}</p>
+              </div>
+            </div>
+            <div className="locations__list-item__features">
+              <div className="locations__list-item__features-info">
+                <p className="locations__list-item__features-info__title">Demands</p>
+                <p className="locations__list-item__features-info__value">{el.demands.map(d => d.demand).join(', ')}</p>
+              </div>
+              <div className="locations__list-item__features-info">
+                <p className="locations__list-item__features-info__title">Service time</p>
+                <p
+                  className="locations__list-item__features-info__value">{dayjs.duration(el.serviceTime, 'seconds').minutes()}min</p>
+              </div>
+            </div>
+            <div className="locations__list-item__footer">
+              <div>
+                <p className="locations__list-item__features-title">Penalties</p>
+                <div className="locations__list-item__features">
+                  <div className="locations__list-item__features-info">
+                    <p className="locations__list-item__features-info__title">Late arrival</p>
+                    <p className="locations__list-item__features-info__value">{el.penaltyLate}</p>
+                  </div>
+                  <div className="locations__list-item__features-info">
+                    <p className="locations__list-item__features-info__title">Waiting</p>
+                    <p className="locations__list-item__features-info__value">{el.penaltyWait}</p>
                   </div>
                 </div>
-                <button
-                  className="locations__list-item__footer-btn">
-                  <svg className="locations__list-item__footer-btn__icon" width="24" height="24">
-                    <use href={`${outlinedSvg}#arrow-link`}/>
-                  </svg>
-                </button>
               </div>
-            </li>
-          })}
-        </ul>}
+              {/*<button*/}
+              {/*  className="locations__list-item__footer-btn">*/}
+              {/*  <svg className="locations__list-item__footer-btn__icon" width="24" height="24">*/}
+              {/*    <use href={`${outlinedSvg}#arrow-link`}/>*/}
+              {/*  </svg>*/}
+              {/*</button>*/}
+            </div>
+          </li>
+        })}
+      </ul>}
     </div>
   </div>
 }
