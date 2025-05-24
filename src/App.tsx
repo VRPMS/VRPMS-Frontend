@@ -15,7 +15,6 @@ function App() {
     try {
       const data = await loadData();
       setState(store => ({ ...store, dataLoaded: true, isLoading: false, ...data }));
-
     } catch {
       setState(store => ({ ...store, dataLoaded: false, isLoading: false }))
     } finally {
@@ -34,19 +33,19 @@ function App() {
     </div>
   } else if (dataLoaded && !isLoading) {
     return <div className="app">
-      <Sidebar/>
+      <Sidebar loadStoreData={loadStoreData}/>
       <div className="app-main-container">
         <AppRouter/>
       </div>
     </div>
   } else {
     return <div className="app">
-      <Sidebar/>
+      <Sidebar loadStoreData={loadStoreData}/>
       <Backdrop
         sx={{ backgroundColor: 'transparent', color: '#262626', left: '336px' }}
         open={open}
       >
-        <CircularProgress color="inherit" />
+        <CircularProgress color="inherit"/>
       </Backdrop>
     </div>
   }

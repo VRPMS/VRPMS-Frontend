@@ -2,24 +2,32 @@ import './Sidebar.scss';
 import '../../index.scss';
 import { links } from "../../data/data.tsx";
 import { NavLink } from "react-router-dom";
-import { ChangeEvent, ReactNode, useRef } from "react";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { Button, styled } from "@mui/material";
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import { uploadFile } from "../../store/uploadFile.ts";
+import { useStore } from "../../store/store.tsx";
 
 function Sidebar() {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [dataUploaded, setDataUploaded] = useState<boolean>(false);
 
-  // const handleButtonClick = () => {
-  //   if(fileInputRef?.current)
-  //     console.log(111, fileInputRef?.current?.click());
-  // };
-
-  const handleInputFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       console.log("Selected file:", files[0]);
     }
+    const result = await uploadFile(files[0]);
+    setError(result.error);
+    setDataUploaded(true);
   };
+
+  useEffect(() => {
+    if (!error && dataUploaded) {
+      window.location.reload();
+      setDataUploaded(false);
+    }
+  }, [error, dataUploaded]);
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -49,7 +57,7 @@ function Sidebar() {
                 ? "sidebar__nav__item sidebar__nav__item--selected"
                 : "sidebar__nav__item")}
           >
-            <svg className="sidebar__nav__item__icon"  width="18" height="18">
+            <svg className="sidebar__nav__item__icon" width="18" height="18">
               <use href={link.icon}/>
             </svg>
             <p className="sidebar__nav__item__title">{link.title}</p>
@@ -61,7 +69,7 @@ function Sidebar() {
         role={undefined}
         variant="contained"
         tabIndex={-1}
-        startIcon={<CloudUploadOutlinedIcon /> as ReactNode}
+        startIcon={<CloudUploadOutlinedIcon/> as ReactNode}
         sx={{
           padding: '16px 20px',
           borderRadius: '12px',
@@ -87,18 +95,11 @@ function Sidebar() {
         Upload file with data
         <VisuallyHiddenInput
           type="file"
-          onChange={(event) => console.log(event.target.files)}
-          multiple
+          onChange={async (event) => await handleInputFileChange(event)}
+          multiple={false}
         />
       </Button>
-      {/*<button onClick={handleButtonClick}>Upload File</button>*/}
-      {/*<input*/}
-      {/*  type="file"*/}
-      {/*  accept=".txt, .TXT"*/}
-      {/*  ref={fileInputRef}*/}
-      {/*  className="sidebar__button-upload"*/}
-      {/*  onChange={handleInputFileChange}*/}
-      {/*/>*/}
+      {error && <p className="sidebar__nav__button--error">{error}</p>}
     </div>
   </div>
 }

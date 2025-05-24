@@ -220,6 +220,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+    max-width: 120px;
 
     &__title {
       color: rgba(38, 38, 38, 0.50);

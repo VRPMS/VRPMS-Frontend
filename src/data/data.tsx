@@ -1,5 +1,5 @@
 import outlinedSvg from '../assets/outlined.svg';
-import { Poi, TDistance, TLocation, TLocationType, TRoute, TVehicle, TVehicleType } from "./types.tsx";
+import { Poi, TDistance, TLocation, TLocationType, TRoute, TVehicle } from "./types.tsx";
 
 export const links = [
   {
@@ -18,7 +18,7 @@ export const links = [
     id: 3,
     path: "/locations",
     title: "Locations",
-    icon: `${outlinedSvg}#location`,
+    icon: `${outlinedSvg}#client`,
   },
   {
     id: 4,
@@ -313,10 +313,6 @@ export const pointDefault: Poi = {
 
 export const vehicleDefault: TVehicle = {
   id: 0,
-  vehicleType: {
-    id: 0,
-    name: ""
-  },
   capacity: [0],
   maxCapacity: [0],
   timeWindows: [
@@ -348,11 +344,6 @@ export const routeDefault: TRoute = {
 export const locationTypeDefault: TLocationType = {
   typeId: 0,
   typeName: ""
-}
-
-export const vehicleTypeDefault: TVehicleType = {
-  id: -1,
-  name: ""
 }
 
 
@@ -396,10 +387,6 @@ export const colors = [
 export const vehicles: TVehicle[] = [
   {
     id: 0,
-    vehicleType: {
-      id: 0,
-      name: "truck"
-    },
     capacity: [40, 20],
     maxCapacity: [40, 20],
     timeWindows: [
@@ -414,10 +401,6 @@ export const vehicles: TVehicle[] = [
   },
   {
     id: 1,
-    vehicleType: {
-      id: 0,
-      name: "truck"
-    },
     capacity: [40, 20],
     maxCapacity: [40, 20],
     timeWindows: [
@@ -432,10 +415,6 @@ export const vehicles: TVehicle[] = [
   },
   {
     id: 2,
-    vehicleType: {
-      id: 0,
-      name: "truck"
-    },
     capacity: [40, 20],
     maxCapacity: [40, 20],
     timeWindows: [
@@ -548,12 +527,6 @@ export const locationTypes: TLocationType[] = [
   },
 ]
 
-export const vehicleTypes: TVehicleType[] = [
-  {
-    id: 0,
-    name: "truck"
-  },
-]
 
 
 export const defaultStoreState = {
@@ -562,7 +535,6 @@ export const defaultStoreState = {
   distances: [distanceDefault],
   routes: [routeDefault],
   locationTypes: [locationTypeDefault],
-  vehicleTypes: [vehicleTypeDefault],
   points: [pointDefault],
   dataLoaded: false,
   isLoading: true

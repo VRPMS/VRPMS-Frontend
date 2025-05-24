@@ -4,11 +4,12 @@ import routeActivePointIcon from '../../assets/route-active-point.png';
 import './MainRoute.scss';
 import { useEffect, useState } from "react";
 import { TDistance, TRoute } from "../../data/types.tsx";
-import { distances, routes } from "../../data/data.tsx";
+import { routes } from "../../data/data.tsx";
 import { NavLink } from "react-router-dom";
 import { paths } from "../../routes/routes.tsx";
 import outlinedSvg from "../../assets/outlined.svg";
 import dayjs from "dayjs";
+import { useStore } from "../../store/store.tsx";
 
 type TProps = {
   activeRoute: number | null,
@@ -17,6 +18,7 @@ type TProps = {
 }
 
 function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
+  const [{ distances }] = useStore();
   const [route, setRoute] = useState<TRoute | null>(null);
   const [routeDistances, setRouteDistances] = useState<TDistance[]>([]);
   const [tripDuration, setTripDuration] = useState<number>(0);

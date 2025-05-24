@@ -1,4 +1,5 @@
 import { Poi, TLocation, TState } from "../data/types.tsx";
+import { distances, locationTypes, routes, vehicles } from "../data/data.tsx";
 
 const BASE_LINK = 'https://vrpms-backend.fly.dev/';
 
@@ -18,12 +19,16 @@ export async function loadData() {
     }
   });
 
-  console.log(locations)
   return {
     locations,
-    points
+    routes: routes,
+    vehicles: vehicles,
+    points,
+    distances,
+    locationTypes,
   } as TState
 }
+
 export async function loadLocations() {
   const res = await fetch(BASE_LINK + "Locations");
   if (res.ok) {

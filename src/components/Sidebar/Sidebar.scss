@@ -1,4 +1,4 @@
-.sidebar{
+.sidebar {
   font-weight: 500;
   width: 306px;
   height: 100%;
@@ -19,7 +19,7 @@
   margin-bottom: 44px;
 }
 
-.sidebar__logo-container__logo{
+.sidebar__logo-container__logo {
   color: #262626;
   font-family: Mont, sans-serif;
   font-size: 40px;
@@ -27,7 +27,7 @@
   line-height: 1.3;
 }
 
-.sidebar__logo-container__subtitle{
+.sidebar__logo-container__subtitle {
   color: #A2A3A5;
   font-size: 14px;
   font-weight: 500;
@@ -48,7 +48,7 @@
   height: 100%;
 }
 
-.sidebar__nav__item{
+.sidebar__nav__item {
   display: flex;
   padding: 16px 20px;
   align-items: center;
@@ -82,8 +82,15 @@
   }
 }
 
-.sidebar__nav__item__title{
+.sidebar__nav__item__title {
   font-size: 16px;
   font-weight: 500;
   line-height: 1.5;
+}
+
+.sidebar__nav__button--error {
+  margin-left: 8px;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #E11515;
 }

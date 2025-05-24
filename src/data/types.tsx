@@ -5,7 +5,6 @@ export type TState = {
   vehicles: TVehicle[],
   distances: TDistance[],
   locationTypes: TLocationType[],
-  vehicleTypes: TVehicleType[],
   routes: TRoute[],
   points: Poi[],
   dataLoaded: boolean,
@@ -17,11 +16,6 @@ export type SetState = Dispatch<SetStateAction<TState>>;
 export type TLocationType = {
   typeId: number,
   typeName: string
-}
-
-export type TVehicleType = {
-  id: number,
-  name: string
 }
 
 export type TDemand = {
@@ -61,7 +55,6 @@ export type TRoute = {
 
 export type TVehicle = {
   id: number,
-  vehicleType: TVehicleType,
   capacity: number[],
   maxCapacity: number[],
   timeWindows: TTimeWindow[],

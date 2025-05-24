@@ -4,7 +4,7 @@ import './index.scss';
 import App from './App.tsx';
 import { StoreProvider } from './store/store.tsx';
 import { BrowserRouter as Router } from "react-router-dom";
-import {APIProvider} from '@vis.gl/react-google-maps';
+import { APIProvider } from '@vis.gl/react-google-maps';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>

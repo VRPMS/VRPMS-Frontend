@@ -22,7 +22,7 @@ function LocationsPage() {
     let tempLocations = locations;
 
     if (locationType !== "" && !isNaN(Number(locationType))) {
-      tempLocations = locations.filter(el => el.type.id === Number(locationType));
+      tempLocations = locations.filter(el => el.pointType.typeId === Number(locationType));
     }
 
     setSearchedLocations(tempLocations.filter(el => {
@@ -110,12 +110,12 @@ function LocationsPage() {
           </MenuItem>
           {locationTypes.map((el) => {
             return <MenuItem
-              value={el.id}
+              value={el.typeId}
               sx={{
                 fontSize: 16,
                 textTransform: 'capitalize',
               }}>
-              {el.name}
+              {el.typeName}
             </MenuItem> as ReactElement
           })}
         </Select>
@@ -130,13 +130,13 @@ function LocationsPage() {
               <div className="locations__list-item__header__icon-container">
                 <svg className="locations__list-item__header__icon" width="40" height="40">
                   <use
-                    href={`${outlinedSvg}#${el.type.id === 0 ? "warehouse" : el.type.id === 1 ? "cross-dock" : el.type.id === 2 ? "location" : "image-cover"}`}/>
+                    href={`${outlinedSvg}#${el.pointType.typeName.length!==0 ? el.pointType.typeName.toLowerCase() : "image-cover"}`}/>
                 </svg>
               </div>
               <div className="locations__list-item__header__info">
                 <h3 className="locations__list-item__header__info-title">Location ID: {el.id}</h3>
                 <p
-                  className="locations__list-item__header__info-subtitle">Type: {el.type.id === 0 ? "warehouse" : el.type.id === 1 ? "cross-dock" : "client"}</p>
+                  className="locations__list-item__header__info-subtitle">Type: {el.pointType.typeName.toLowerCase()}</p>
               </div>
             </div>
             <div className="locations__list-item__point">
@@ -149,7 +149,7 @@ function LocationsPage() {
                 <div>
                   {el.timeWindows.map(({ windowEnd, windowStart }, index) => {
                     return <p key={index} className="locations__list-item__point__text">
-                      {dayjs.duration(windowStart).format("HH:MM")} - {dayjs.duration(windowEnd).format("HH:MM")}
+                      {dayjs(`2004-01-01T${windowStart}`).format("HH:mm")} - {dayjs(`2004-01-01T${windowEnd}`).format("HH:mm")}
                     </p>
                   })}
                 </div>
@@ -166,12 +166,12 @@ function LocationsPage() {
             <div className="locations__list-item__features">
               <div className="locations__list-item__features-info">
                 <p className="locations__list-item__features-info__title">Demands</p>
-                <p className="locations__list-item__features-info__value">{el.demands.map(d => d.demand).join(', ')}</p>
+                <p className="locations__list-item__features-info__value">{el.demands.map(d => d.demandName).join(', ')}</p>
               </div>
               <div className="locations__list-item__features-info">
                 <p className="locations__list-item__features-info__title">Service time</p>
                 <p
-                  className="locations__list-item__features-info__value">{dayjs.duration(el.serviceTime, 'seconds').minutes()}min</p>
+                  className="locations__list-item__features-info__value">{dayjs(`2004-01-01T${el.serviceTime}`).minute()} min</p>
               </div>
             </div>
             <div className="locations__list-item__footer">

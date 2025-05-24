@@ -48,24 +48,32 @@ function MainPage() {
       destination,
       waypoints,
       travelMode: google.maps.TravelMode.DRIVING,
-      optimizeWaypoints: true,
+      optimizeWaypoints: false,
     }, (result, status) => {
       if (status === google.maps.DirectionsStatus.OK && result) {
-        const path = result.routes[0].overview_path;
+        const fullPath: google.maps.LatLng[] = [];
+        result.routes[0].legs.forEach(leg => {
+          leg.steps.forEach(step => {
+            fullPath.push(...step.path);
+          });
+        });
         const newPolyline = new google.maps.Polyline({
-          path,
+          path: fullPath,
           map,
           clickable: true,
           strokeColor: colors[index],
           strokeOpacity: 0.8,
           strokeWeight: 5,
+          geodesic: true,
         });
+
+        const zIndex = newPolyline.get('zIndex');
 
         newPolyline.addListener('click', () => {
           if (selectedPolylineRef.current && selectedPolylineRef.current !== newPolyline) {
-            selectedPolylineRef.current?.setOptions({ strokeWeight: 4 });
+            selectedPolylineRef.current?.setOptions({ strokeWeight: 5, zIndex: zIndex });
           }
-          newPolyline.setOptions({ strokeWeight: 8 });
+          newPolyline.setOptions({ strokeWeight: 10, zIndex: 10 });
           selectedPolylineRef.current = newPolyline;
           setActiveRoute(routes[index].id);
         });
@@ -82,9 +90,10 @@ function MainPage() {
 
     routes.forEach((route, index) => drawRoute(route.points, index));
 
+    const zIndex = selectedPolylineRef.current?.get('zIndex');
     const mapClickListener = map.addListener('click', () => {
       if (selectedPolylineRef.current) {
-        selectedPolylineRef.current?.setOptions({ strokeWeight: 4 });
+        selectedPolylineRef.current?.setOptions({ strokeWeight: 5, zIndex: zIndex });
         selectedPolylineRef.current = null;
       }
       if (infoWindowRef.current) {
@@ -109,7 +118,7 @@ function MainPage() {
           if (el.routeId === activeRoute) {
             setActiveRoute(null);
             if (selectedPolylineRef.current) {
-              selectedPolylineRef.current?.setOptions({ strokeWeight: 4 });
+              selectedPolylineRef.current?.setOptions({ strokeWeight: 5 });
               selectedPolylineRef.current = null;
             }
           }
@@ -145,7 +154,7 @@ function MainPage() {
     const infoWindow = new google.maps.InfoWindow({
       content: `<div class="main-map__map__info-window">
       <h3>Location ID: ${location.id}</h3>
-      <p>Type: ${location.pointType.typeId === 0 ? 'warehouse' : location.pointType.typeId === 1 ? 'cross-dock' : 'client'}</p>
+      <p>Type: ${location.pointType.typeName.toLowerCase()}</p>
       <p>Point: ${location.latitude}, ${location.longitude}</p>
     </div>`
     });

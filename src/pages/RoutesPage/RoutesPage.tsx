@@ -6,22 +6,16 @@ import '../LocationsPage/LocationsPage.scss';
 import './RoutesPage.scss';
 import dayjs from "dayjs";
 import { useStore } from "../../store/store.tsx";
+import { locationDefault, vehicleDefault } from "../../data/data.tsx";
 
 function RoutesPage() {
   const [{ locations, distances, vehicles }] = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("query") || "";
-  // const [vehicleType, setVehicleType] = useState<number | string>("");
   const [searchedDistances, setSearchedDistances] = useState<TDistance[]>([]);
 
   useEffect(() => {
-    let tempDistances = distances;
-
-    // if (vehicleType !== "" && !isNaN(Number(vehicleType))) {
-    //   tempVehicles = vehicles.filter(el => el.vehicleType.id === Number(vehicleType));
-    // }
-
-    setSearchedDistances(tempDistances.filter(el => {
+    setSearchedDistances(distances.filter(el => {
         const locationFrom = locations.find(item => item.id === el.locationFromId);
         const locationTo = locations.find(item => item.id === el.locationToId);
         const vehicle = vehicles.find(item => item.id === el.vehicleId);
@@ -30,15 +24,12 @@ function RoutesPage() {
           || (locationFrom?.latitude && locationFrom?.latitude.toString().includes(query))
           || (locationTo?.longitude.toString() && locationTo?.longitude.toString().includes(query))
           || (locationTo?.latitude && locationTo?.latitude.toString().includes(query))
-          || ("Vehicle ID: " + el?.id).includes(query)
-          || ("Location ID: " + el?.id).includes(query)
+          || ("Vehicle ID: " + vehicle?.id).includes(query)
+          || ("Location ID: " + locationFrom?.id).includes(query)
+          || ("Location ID: " + locationTo?.id).includes(query)
       }
     ))
-  }, [searchParams]);
-
-  // const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
-  //   setVehicleType(event.target.value as number | null);
-  // };
+  }, [searchParams, locations, vehicles]);
 
   return <div className="routes">
     <header className="locations__header">
@@ -64,9 +55,10 @@ function RoutesPage() {
       <h2 className="locations__list-container__title">Distances and durations</h2>
       {searchedDistances && <ul className="routes__list">
         {searchedDistances.map((el, index) => {
-          const locationFrom = locations.find(item => item.id === el.locationFromId);
-          const locationTo = locations.find(item => item.id === el.locationToId);
-          const vehicle = vehicles.find(item => item.id === el.vehicleId);
+          const locationFrom = locations.find(item => item.id === el.locationFromId) ?? locationDefault;
+          const locationTo = locations.find(item => item.id === el.locationToId) ?? locationDefault;
+          const vehicle = vehicles.find(item => item.id === el.vehicleId) ?? vehicleDefault;
+
           const km = Math.floor(el?.distance / 1000);
           const m = Math.round(el?.distance % 1000);
           const h = dayjs.duration(el.duration, 'seconds').hours();
@@ -106,7 +98,6 @@ function RoutesPage() {
             <div className="routes__list-item__info routes__list-item__info--small">
               <p className="routes__list-item__info-title">Vehicle</p>
               <p className="routes__list-item__info-data">Vehicle ID: {vehicle.id}</p>
-              <p className="routes__list-item__info-subtitle">{vehicle.vehicleType.name}</p>
             </div>
             <div className="routes__list-item__info routes__list-item__info--small">
               <p className="routes__list-item__info-title">Distance</p>
