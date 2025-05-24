@@ -16,7 +16,8 @@
     "jsx": "react-jsx",
 
     /* Linting */
-    "strict": true
+    "strict": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"]
 }

@@ -1,40 +1,74 @@
 import { Dispatch, SetStateAction } from "react";
 
 export type TState = {
-  locations: TLocation[] | null,
+  locations: TLocation[],
+  vehicles: TVehicle[],
+  distances: TDistance[],
+  locationTypes: TLocationType[],
+  routes: TRoute[],
+  points: Poi[],
+  dataLoaded: boolean,
+  isLoading: boolean
 }
 
 export type SetState = Dispatch<SetStateAction<TState>>;
 
-export const defaultStoreState = {
-  locations: null,
-}
-
-export enum ELocationType {
-  WAREHOUSE = 0,
-  CROSS_DOCK = 1,
-  POINT = 2,
+export type TLocationType = {
+  typeId: number,
+  typeName: string
 }
 
 export type TDemand = {
-  id: string;
-  locationId: string;
-  demand: string;
+  demandId: number,
+  demandName: string,
+  demandValue: number
+}
+
+export type TTimeWindow = {
+  windowStart: string,
+  windowEnd: string
 }
 
 export type Poi = {
-  key: string,
+  id: number,
+  pointType: TLocationType,
   location: google.maps.LatLngLiteral
 }
 
 export type TLocation = {
-  id: string;
-  name: string;
-  type: ELocationType;
+  id: number;
+  pointType: TLocationType;
   longitude: number;
   latitude: number;
-  serviceTime: number;
+  serviceTime: string;
   penaltyLate: number;
   penaltyWait: number;
+  timeWindows: TTimeWindow[],
   demands: TDemand[],
+}
+
+export type TRoute = {
+  id: number,
+  vehicleId: number,
+  points: Poi[]
+}
+
+export type TVehicle = {
+  id: number,
+  capacity: number[],
+  maxCapacity: number[],
+  timeWindows: TTimeWindow[],
+  penaltyCapacityOverload: number,
+  penaltyMaxCapacityOverload: number,
+  penaltyOverwork: number,
+}
+
+
+export type TDistance = {
+  id: number,
+  vehicleId: number,
+  locationFromId: number,
+  locationToId: number,
+  distance: number,
+  duration: number
 }

@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { defaultStoreState, SetState, TState } from "../data/types.tsx";
+import { SetState, TState } from "../data/types.tsx";
+import { defaultStoreState } from "../data/data.tsx";
 
 const StoreContext = createContext<[TState, SetState]|undefined>(undefined);
 

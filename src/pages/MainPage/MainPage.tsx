@@ -1,54 +1,186 @@
-import './MainPage.scss'
-import { useCallback, useRef, useState } from "react";
+import './MainPage.scss';
+import { JSX, ReactNode, useEffect, useRef, useState } from "react";
 import MainLocations from "../../components/MainLocations/MainLocations.tsx";
 import MainRoute from "../../components/MainRoute/MainRoute.tsx";
-import { AdvancedMarker, Map, MapCameraChangedEvent, useMap } from '@vis.gl/react-google-maps';
-import { locations, points } from "../../data/data.tsx";
-import pointPNG from '../../assets/images/point.png'
-import { Poi } from "../../data/types.tsx";
+import { AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
+import { colors, pointDefault } from "../../data/data.tsx";
+import warehousePNG from '../../assets/images/warehouse.png';
+import crossdockPNG from '../../assets/images/crossdock.png';
+import pointPNG from '../../assets/images/point.png';
+import { Poi, TVehicle } from "../../data/types.tsx";
+import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import TextField from '@mui/material/TextField';
+import { Checkbox } from "@mui/material";
+import outlinedSvg from "../../assets/outlined.svg";
+import { useStore } from "../../store/store.tsx";
+
+type TPolylineRef = {
+  routeId: number,
+  line: google.maps.Polyline
+}
 
 function MainPage() {
-  const [activeTab, setActiveTab] = useState("locations");
+  const [{ locations, points, routes, vehicles }] = useStore();
+  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeLocation, setActiveLocation] = useState<number | null>(null);
+  const [activeRoute, setActiveRoute] = useState<number | null>(null);
+  const [selectedVehicles, setSelectedVehicles] = useState<TVehicle[]>([]);
   const map = useMap();
   const markerRefs = useRef<Record<string, google.maps.marker.AdvancedMarkerElement>>({});
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
+  const polylinesRef = useRef<TPolylineRef[]>([]);
+  const selectedPolylineRef = useRef<google.maps.Polyline | null>(null);
 
-  function onTabClick(tab) {
+  const drawRoute = (routePoints: Poi[], index: number) => {
+    if (routePoints.length < 2) return;
+    const origin = routePoints.find(el => el?.pointType.typeId === 0)?.location ?? pointDefault.location;
+    const destination = routePoints.find(el => el?.pointType.typeId === 0)?.location ?? pointDefault.location;
+    const waypoints = routePoints.filter(el => el?.pointType.typeId !== 0).map(p => ({
+      location: p.location,
+      stopover: true
+    }));
+
+    const directionsService = new google.maps.DirectionsService();
+    directionsService.route({
+      origin,
+      destination,
+      waypoints,
+      travelMode: google.maps.TravelMode.DRIVING,
+      optimizeWaypoints: false,
+    }, (result, status) => {
+      if (status === google.maps.DirectionsStatus.OK && result) {
+        const fullPath: google.maps.LatLng[] = [];
+        result.routes[0].legs.forEach(leg => {
+          leg.steps.forEach(step => {
+            fullPath.push(...step.path);
+          });
+        });
+        const newPolyline = new google.maps.Polyline({
+          path: fullPath,
+          map,
+          clickable: true,
+          strokeColor: colors[index],
+          strokeOpacity: 0.8,
+          strokeWeight: 5,
+          geodesic: true,
+        });
+
+        const zIndex = newPolyline.get('zIndex');
+
+        newPolyline.addListener('click', () => {
+          if (selectedPolylineRef.current && selectedPolylineRef.current !== newPolyline) {
+            selectedPolylineRef.current?.setOptions({ strokeWeight: 5, zIndex: zIndex });
+          }
+          newPolyline.setOptions({ strokeWeight: 10, zIndex: 10 });
+          selectedPolylineRef.current = newPolyline;
+          setActiveRoute(routes[index].id);
+        });
+
+        polylinesRef.current.push({ routeId: routes[index].id, line: newPolyline });
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (!map) return;
+
+    polylinesRef.current = [];
+
+    routes.forEach((route, index) => drawRoute(route.points, index));
+
+    const zIndex = selectedPolylineRef.current?.get('zIndex');
+    const mapClickListener = map.addListener('click', () => {
+      if (selectedPolylineRef.current) {
+        selectedPolylineRef.current?.setOptions({ strokeWeight: 5, zIndex: zIndex });
+        selectedPolylineRef.current = null;
+      }
+      if (infoWindowRef.current) {
+        infoWindowRef.current?.close();
+        setActiveLocation(null);
+        infoWindowRef.current = null;
+      }
+      setActiveRoute(null);
+    });
+
+    return () => {
+      google.maps.event.removeListener(mapClickListener);
+    };
+  }, [map]);
+
+  useEffect(() => {
+    if (selectedVehicles.length !== 0) {
+      polylinesRef.current.forEach(el => {
+        const route = selectedVehicles.find(item => item.id === el.routeId);
+        if (!route) {
+          el.line.setVisible(false);
+          if (el.routeId === activeRoute) {
+            setActiveRoute(null);
+            if (selectedPolylineRef.current) {
+              selectedPolylineRef.current?.setOptions({ strokeWeight: 5 });
+              selectedPolylineRef.current = null;
+            }
+          }
+        } else {
+          el.line.setVisible(true);
+        }
+      })
+    } else {
+      polylinesRef.current.forEach(el => {
+        el.line.setVisible(true);
+      })
+    }
+  }, [selectedVehicles]);
+
+  function onTabClick(tab: number) {
     if (tab !== activeTab) {
       setActiveTab(tab)
     }
   }
 
-  const handleClick = (ev: google.maps.MapMouseEvent, key:string) => {
-    if(!map) return;
-    if(!ev.latLng) return;
-    const marker = markerRefs.current[key]
+  const handleClick = (ev: google.maps.MapMouseEvent | null, pointId: number) => {
+    if (!map) return;
+
+    const marker = markerRefs.current[pointId.toString()];
+    const location = locations?.find(el => el.id === pointId);
+    if (!marker || !location) return;
+
     if (infoWindowRef.current) {
       infoWindowRef.current?.close();
-    }
-
-    console.log('marker clicked:', ev.latLng.toString());
-    map.panTo(ev.latLng);
-    if(map.getZoom() <=13){
-      map.setZoom(13);
+      setActiveLocation(null);
     }
 
     const infoWindow = new google.maps.InfoWindow({
-      content: `
-    <div class="custom-info-window">
-      <h3>${locations.find(el=>el.id===key)?.name}</h3>
-      <p>${locations.find(el=>el.id===key)?.latitude}, ${locations.find(el=>el.id===key)?.longitude}</p>
-    </div>
-  `,
+      content: `<div class="main-map__map__info-window">
+      <h3>Location ID: ${location.id}</h3>
+      <p>Type: ${location.pointType.typeName.toLowerCase()}</p>
+      <p>Point: ${location.latitude}, ${location.longitude}</p>
+    </div>`
     });
+
     infoWindow.open({
       anchor: marker,
       map,
-      shouldFocus: true,
+      shouldFocus: false,
     });
 
+    infoWindow.addListener('close', () => {
+      setActiveLocation(null);
+    });
+
+    if (ev?.latLng) {
+      map.panTo(ev.latLng);
+    } else if (marker.position) {
+      map.panTo(marker.position);
+    }
+
+    if ((map.getZoom() ?? 0) <= 13) map.setZoom(13);
+
     infoWindowRef.current = infoWindow;
+    setActiveLocation(pointId);
   };
+
 
   return <div className="main">
     <header className="main__header">
@@ -56,49 +188,127 @@ function MainPage() {
         <h1 className="main__header__heading__title">Main page</h1>
         <p className="main__header__heading__subtitle">View locations and routes</p>
       </div>
-      <div>autocomplete</div>
+      <div className="main__header__filter-container">
+        <Autocomplete
+          multiple
+          id="checkboxes-tags-demo"
+          options={vehicles}
+          disableCloseOnSelect
+          onChange={(event: any, newValue: TVehicle[] | null) => {
+            setSelectedVehicles(newValue ?? []);
+          }}
+          value={selectedVehicles}
+          getOptionLabel={(option) => "Vehicle ID: " + option?.id.toString()}
+          renderOption={(props, option, { selected }) => {
+            const { key, ...optionProps } = props;
+            return (
+              <li key={key} {...optionProps}>
+                <Checkbox
+                  icon={<CheckBoxOutlineBlankIcon/> as ReactNode}
+                  checkedIcon={<CheckBoxIcon/> as ReactNode}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                Vehicle ID: {option?.id.toString()}
+              </li> as ReactNode
+            );
+          }}
+          popupIcon={<svg width="24" height="24">
+            <use href={outlinedSvg + "#arrow-down"}/>
+          </svg> as ReactNode}
+          renderInput={(params: AutocompleteRenderInputParams): JSX.Element => {
+            return <TextField
+              inputRef={params.InputProps.ref}
+              inputProps={params.inputProps}
+              InputProps={params.InputProps}
+              InputLabelProps={{ ...params.InputLabelProps, shrink: true }}
+              disabled={false}
+              fullWidth={true}
+              label="Vehicles filter"
+              placeholder="Search vehicle"
+            />
+          }}
+          sx={{
+            '.MuiAutocomplete-tag': {
+              borderRadius: '6px',
+              backgroundColor: '#F2F2F2',
+              margin: 0,
+              fontFamily: 'SF Pro Display, sans-serif',
+            },
+            '.MuiOutlinedInput-root': {
+              padding: '0',
+              fontFamily: 'SF Pro Display, sans-serif',
+              paddingTop: '20px',
+              '.MuiOutlinedInput-notchedOutline ': {
+                borderWidth: '0',
+              },
+              '.MuiAutocomplete-input': {
+                color: '#262626',
+                paddingBottom: '0'
+              },
+              columnGap: '8px',
+              rowGap: '8px',
+            },
+            '.MuiInputLabel-root': {
+              fontSize: '16px',
+              fontWeight: '500',
+              fontFamily: 'SF Pro Display, sans-serif',
+              left: '-8px',
+              top: '3px',
+              color: '#262626'
+            },
+            '.MuiInputLabel-root.Mui-disabled': {
+              color: '#262626'
+            },
+            '.MuiInputBase-root': {
+              width: '400px',
+            },
+          }}
+        />
+      </div>
     </header>
     <div className="main__app">
       <div className="main__map-info">
         <div className="main__map-info__tabs">
           <button
-            onClick={() => onTabClick("locations")}
-            className={activeTab === "locations"
+            onClick={() => onTabClick(0)}
+            className={activeTab === 0
               ? "main__map-info__tab main__map-info__tab--active"
               : "main__map-info__tab"}>
             <p>Locations</p>
           </button>
           <button
-            onClick={() => onTabClick("route")}
-            className={activeTab === "route"
+            onClick={() => onTabClick(1)}
+            className={activeTab === 1
               ? "main__map-info__tab main__map-info__tab--active"
               : "main__map-info__tab"}>
             <p>Route</p>
           </button>
         </div>
         <div className="main__map-info__container">
-          {activeTab === "locations"
-            ? <MainLocations/>
-            : <MainRoute/>}
+          {activeTab === 0
+            ? <MainLocations activeLocation={activeLocation} onLocationClick={handleClick}/>
+            : <MainRoute activeRoute={activeRoute} activeLocation={activeLocation} onLocationClick={handleClick}/>}
         </div>
       </div>
       <div className="main__map__container">
         <div className="main__map">
           <Map
             mapId='MAP_ID'
-            defaultZoom={6}
-            defaultCenter={ { lat: Number(locations[0].latitude), lng: Number(locations[0].longitude) } }>
+            defaultZoom={7}
+            defaultCenter={{ lat: Number(locations[0].latitude), lng: Number(locations[0].longitude) }}>
             <>
-              {points.map((poi: Poi)=>{
+              {points?.map((poi: Poi) => {
+                const icon = poi.pointType.typeId === 1 ? warehousePNG : poi.pointType.typeId === 2 ? crossdockPNG : pointPNG;
                 return <AdvancedMarker
-                  key={poi.key}
+                  key={poi.id}
                   position={poi.location}
                   clickable={true}
                   ref={(el) => {
-                    if (el) markerRefs.current[poi.key] = el;
+                    if (el) markerRefs.current[poi.id] = el;
                   }}
-                  onClick={(ev)=>handleClick(ev, poi.key)}>
-                  <img src={pointPNG} alt="point" width="40" height="40"/>
+                  onClick={(ev) => handleClick(ev, poi.id)}>
+                  <img src={icon} alt="point" width="40" height="40"/>
                 </AdvancedMarker>
               })}
             </>
