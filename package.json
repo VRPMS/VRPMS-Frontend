@@ -25,7 +25,6 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0",
     "react-toastify": "^11.0.5",
-    "sass": "^1.85.1",
     "sass-loader": "^16.0.5",
     "stylelint-scss": "^6.11.1",
     "uniqolor": "^1.1.1"
@@ -43,6 +42,7 @@
     "globals": "^15.15.0",
     "jiti": "^2.4.2",
     "rollup": "^4.41.1",
+    "sass": "^1.89.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.3.5"
