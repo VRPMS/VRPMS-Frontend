@@ -4,5 +4,5 @@
   "assets": {
     "directory": "./dist"
   },
-  "main": "./main.tsx"
+  "main": "main.tsx"
 }
