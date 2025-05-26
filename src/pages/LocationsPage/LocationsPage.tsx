@@ -34,10 +34,6 @@ function LocationsPage() {
     ))
   }, [locationType, searchParams]);
 
-  const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
-    setLocationType(event.target.value as number | null);
-  };
-
   return <div className="locations">
     <header className="locations__header">
       <div className="locations__header__heading">
@@ -60,7 +56,7 @@ function LocationsPage() {
           id="demo-simple-select-filled"
           displayEmpty
           value={locationType}
-          onChange={handleSelectChange}
+          onChange={(e: SelectChangeEvent<unknown>)=>setLocationType(e?.target?.value as number)}
           label="Location type"
           IconComponent={KeyboardArrowDownRoundedIcon}
           sx={{

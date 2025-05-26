@@ -24,23 +24,29 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
   const [tripDuration, setTripDuration] = useState<number>(0);
 
   useEffect(() => {
-    setRoute(routes.find(el => el.id === activeRoute));
+    setRoute(routes.find(el => el.id === activeRoute) ?? null);
   }, [activeRoute]);
 
   useEffect(() => {
-    const filteredDistances = distances?.filter(el => el.vehicleId === route?.vehicleId);
+    const filteredDistances = distances.filter(el => el.vehicleId === route?.vehicleId);
 
     setRouteDistances(filteredDistances);
     setTripDuration(filteredDistances.reduce((dur, el) => dur + el.duration, 0));
   }, [route, distances]);
 
   const getDistance = (index: number, array: any) => {
-    const tempDistance = routeDistances.find(item => item.locationToId === array[index].id && item.locationFromId === array[index - 1].id)?.distance;
+    const tempDistance = routeDistances.find(item => item.locationToId === array[index].id && item.locationFromId === array[index - 1].id)?.distance ?? 0;
 
     const km = Math.floor(tempDistance / 1000);
     const m = Math.round(tempDistance % 1000);
     return `${km ? km + ' km' : ""} ${m ? m + ' m' : ""}`
+  }
 
+  const getDuration = (duration: number) => {
+    const h = dayjs(`2004-01-01T${duration}`).get('hours') ?? 0;
+    const min = dayjs(`2004-01-01T${duration}`).get('minutes') ?? 0;
+
+    return `${h ? h + ' h' : ""} ${min ? min + ' min' : ""}`
   }
 
   return <>
@@ -56,10 +62,11 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
               </svg>
             </NavLink>
             <p className="main-route__route-info__header__subtitle">Trip
-              duration: {dayjs.duration(tripDuration, 'seconds').hours()} h {dayjs.duration(tripDuration, 'seconds').minutes()} min</p>
+              duration: {getDuration(tripDuration)}</p>
             <div className="main-route__route-info__list">
               <ul className="main-route__route-info__list-content">
                 {route?.points.map((el, index, array) => {
+
                   return <li
                     onClick={() => onLocationClick(null, el.id)}
                     key={index}
