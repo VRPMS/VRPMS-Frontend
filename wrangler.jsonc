@@ -2,7 +2,7 @@
   "name": "worker",
   "compatibility_date": "2025-05-26",
   "assets": {
-    "directory": "./dist"
+    "directory": "src"
   },
-  "main": "./main.tsx"
+  "main": "./src/main.tsx"
 }
