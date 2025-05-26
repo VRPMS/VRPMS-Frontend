@@ -64,40 +64,38 @@ function VehiclesPage() {
                   </svg>
                 </div>
                 <div>
-                  {el.timeWindows.map(({ windowEnd, windowStart }, index) => {
-                    return <p key={index} className="locations__list-item__point__text">
-                      {dayjs(`2004-01-01T${windowStart}`).format("HH:mm")} - {dayjs(`2004-01-01T${windowEnd}`).format("HH:mm")}
-                    </p>
-                  })}
+                  <p key={index} className="locations__list-item__point__text">
+                    {dayjs(`2004-01-01T${el.carWorkHours.windowStart}`).format("HH:mm")} - {dayjs(`2004-01-01T${el.carWorkHours.windowEnd}`).format("HH:mm")}
+                  </p>
                 </div>
               </div>
             </div>
             <div className="locations__list-item__features">
               <div className="locations__list-item__features-info">
                 <p className="locations__list-item__features-info__title">Capacity</p>
-                <p className="locations__list-item__features-info__value">{el.capacity.join(', ')}</p>
+                <p className="locations__list-item__features-info__value">{el.carCapacities.map(({capacity})=>capacity).join(', ')}</p>
               </div>
               <div className="locations__list-item__features-info">
                 <p className="locations__list-item__features-info__title">Max capacity</p>
                 <p
-                  className="locations__list-item__features-info__value">{el.maxCapacity.join(', ')}</p>
+                  className="locations__list-item__features-info__value">{el.carCapacities.map(({maxCapacity})=>maxCapacity).join(', ')}</p>
               </div>
             </div>
             <div className="locations__list-item__footer">
-              <div>
+              <div className="locations__list-item__footer-container">
                 <p className="locations__list-item__features-title">Penalties</p>
-                <div className="locations__list-item__features">
+                <div className="locations__list-item__features locations__list-item__features--footer">
                   <div className="locations__list-item__features-info">
                     <p className="locations__list-item__features-info__title">Capacity</p>
-                    <p className="locations__list-item__features-info__value">{el.penaltyCapacityOverload}</p>
+                    <p className="locations__list-item__features-info__value">{el.capacityOverloadPenalty}</p>
                   </div>
                   <div className="locations__list-item__features-info">
                     <p className="locations__list-item__features-info__title">Max capacity</p>
-                    <p className="locations__list-item__features-info__value">{el.penaltyMaxCapacityOverload}</p>
+                    <p className="locations__list-item__features-info__value">{el.maxCapacityOverloadPenalty}</p>
                   </div>
                   <div className="locations__list-item__features-info">
                     <p className="locations__list-item__features-info__title">Overwork</p>
-                    <p className="locations__list-item__features-info__value">{el.penaltyOverwork}</p>
+                    <p className="locations__list-item__features-info__value">{el.overWorkPenalty}</p>
                   </div>
                 </div>
               </div>

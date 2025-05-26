@@ -29,6 +29,13 @@ export type TTimeWindow = {
   windowEnd: string
 }
 
+export type TCapacities = {
+  demandId: number,
+  demandName: string,
+  capacity: number,
+  maxCapacity: number,
+}
+
 export type Poi = {
   id: number,
   pointType: TLocationType,
@@ -55,14 +62,13 @@ export type TRoute = {
 
 export type TVehicle = {
   id: number,
-  capacity: number[],
-  maxCapacity: number[],
-  timeWindows: TTimeWindow[],
-  penaltyCapacityOverload: number,
-  penaltyMaxCapacityOverload: number,
-  penaltyOverwork: number,
+  carCapacities: TCapacities[],
+  carWorkHours: TTimeWindow,
+  capacityOverloadPenalty: number,
+  maxCapacityOverloadPenalty: number,
+  overWorkPenalty: number,
+  routeTemplate: any[], // TODO when routeTemplate is ready
 }
-
 
 export type TDistance = {
   id: number,

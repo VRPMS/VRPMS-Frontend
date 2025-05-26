@@ -1,12 +1,16 @@
-import { Poi, TLocation, TState } from "../data/types.tsx";
-import { distances, locationTypes, routes, vehicles } from "../data/data.tsx";
+import { Poi, TState } from "../data/types.tsx";
+import { distances, locations, routes } from "../data/data.tsx";
 
 const BASE_LINK = 'https://vrpms-backend.fly.dev/';
 
 export async function loadData() {
-  const [locations] = await Promise.all([
-    loadLocations(),
+  const [locations, vehicles, locationTypes] = await Promise.all([
+    loadCollection("locations"),
+    loadCollection("cars"),
+    loadCollection("points/types/lov"),
   ]);
+
+  console.log(11, locations)
 
   const points: Poi[] = locations.map(el => {
     return {
@@ -21,19 +25,18 @@ export async function loadData() {
 
   return {
     locations,
-    routes: routes,
-    vehicles: vehicles,
+    routes,
+    vehicles,
     points,
     distances,
     locationTypes,
   } as TState
 }
 
-export async function loadLocations() {
-  const res = await fetch(BASE_LINK + "Locations");
+export async function loadCollection(key: string) {
+  const res = await fetch(BASE_LINK + key);
   if (res.ok) {
-    const data = await res.json();
-    return data as TLocation[];
+    return res.json();
   } else {
     throw await res.json();
   }

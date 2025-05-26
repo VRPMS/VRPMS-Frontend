@@ -307,6 +307,7 @@ function MainPage() {
                   ref={(el) => {
                     if (el) markerRefs.current[poi.id] = el;
                   }}
+                  zIndex={poi.pointType.typeId === 1 ? 100 : poi.pointType.typeId === 2 ? 10 : 1}
                   onClick={(ev) => handleClick(ev, poi.id)}>
                   <img src={icon} alt="point" width="40" height="40"/>
                 </AdvancedMarker>
