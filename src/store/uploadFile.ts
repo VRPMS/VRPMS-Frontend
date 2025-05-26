@@ -1,6 +1,9 @@
 const BASE_LINK = 'https://vrpms-backend.fly.dev/';
 
-export async function uploadFile(file: File) {
+export async function uploadFile(file: File | null) {
+  if(!file) {
+    return { error: "Try again." }
+  }
   const formData = new FormData();
   formData.append('file', file);
 
@@ -8,7 +11,7 @@ export async function uploadFile(file: File) {
     const res = await fetch(BASE_LINK + 'data/import', {
       method: 'POST',
       body: formData,
-    });
+    } as RequestInit);
 
     if (!res.ok) {
       const error = JSON.parse(await res.text());

@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
     "composite": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "allowSyntheticDefaultImports": true,
+    "target": "es2020",
+    "lib": ["dom", "dom.iterable", "es2020"],
+    "types": ["node"]
   },
   "include": ["vite.config.ts"]
 }

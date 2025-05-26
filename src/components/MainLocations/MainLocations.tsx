@@ -3,12 +3,7 @@ import { paths } from "../../routes/routes.tsx";
 import outlinedSvg from '../../assets/outlined.svg';
 import './MainLocations.scss';
 import dayjs from "dayjs";
-import duration from 'dayjs/plugin/duration'
 import { useStore } from "../../store/store.tsx";
-import { useEffect, useState } from "react";
-import { TLocation } from "../../data/types.tsx";
-
-dayjs.extend(duration);
 
 type TProps = {
   activeLocation: number | null,

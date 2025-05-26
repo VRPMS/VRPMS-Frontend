@@ -14,7 +14,7 @@ function App() {
   async function loadStoreData() {
     try {
       const data = await loadData();
-      setState(store => ({ ...store, dataLoaded: true, isLoading: false, ...data }));
+      setState(store => ({ ...store, ...data, dataLoaded: true, isLoading: false }));
     } catch {
       setState(store => ({ ...store, dataLoaded: false, isLoading: false }))
     } finally {
@@ -33,14 +33,14 @@ function App() {
     </div>
   } else if (dataLoaded && !isLoading) {
     return <div className="app">
-      <Sidebar loadStoreData={loadStoreData}/>
+      <Sidebar/>
       <div className="app-main-container">
         <AppRouter/>
       </div>
     </div>
   } else {
     return <div className="app">
-      <Sidebar loadStoreData={loadStoreData}/>
+      <Sidebar/>
       <Backdrop
         sx={{ backgroundColor: 'transparent', color: '#262626', left: '336px' }}
         open={open}

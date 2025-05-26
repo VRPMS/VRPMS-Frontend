@@ -61,8 +61,8 @@ function RoutesPage() {
 
           const km = Math.floor(el?.distance / 1000);
           const m = Math.round(el?.distance % 1000);
-          const h = dayjs.duration(el.duration, 'seconds').hours();
-          const min = dayjs.duration(el.duration, 'seconds').minutes();
+          const h = dayjs(`2004-01-01T${el.duration}`).get('hours') ?? 0;
+          const min = dayjs(`2004-01-01T${el.duration}`).get('minutes') ?? 0;
 
           return <li key={index} className="routes__list-item">
             <div className="routes__list-item__info">

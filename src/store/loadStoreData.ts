@@ -1,4 +1,4 @@
-import { Poi, TState } from "../data/types.tsx";
+import { Poi, TLocation, TState } from "../data/types.tsx";
 import { distances, locations, routes } from "../data/data.tsx";
 
 const BASE_LINK = 'https://vrpms-backend.fly.dev/';
@@ -10,9 +10,7 @@ export async function loadData() {
     loadCollection("points/types/lov"),
   ]);
 
-  console.log(11, locations)
-
-  const points: Poi[] = locations.map(el => {
+  const points: Poi[] = locations.map((el : TLocation) => {
     return {
       id: el.id,
       pointType: el.pointType,
@@ -28,7 +26,7 @@ export async function loadData() {
     routes,
     vehicles,
     points,
-    distances,
+    distances: distances,
     locationTypes,
   } as TState
 }

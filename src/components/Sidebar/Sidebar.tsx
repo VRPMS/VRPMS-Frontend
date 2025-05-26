@@ -6,7 +6,6 @@ import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { Button, styled } from "@mui/material";
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import { uploadFile } from "../../store/uploadFile.ts";
-import { useStore } from "../../store/store.tsx";
 
 function Sidebar() {
   const [error, setError] = useState<string | null>(null);
@@ -14,12 +13,17 @@ function Sidebar() {
 
   const handleInputFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
+    if(!files) {
+      const result = await uploadFile(null);
+      setError(result.error);
+    }
+
     if (files && files.length > 0) {
       console.log("Selected file:", files[0]);
+      const result = await uploadFile(files[0]);
+      setError(result.error);
+      setDataUploaded(true);
     }
-    const result = await uploadFile(files[0]);
-    setError(result.error);
-    setDataUploaded(true);
   };
 
   useEffect(() => {
