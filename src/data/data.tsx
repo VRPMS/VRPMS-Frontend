@@ -313,17 +313,20 @@ export const pointDefault: Poi = {
 
 export const vehicleDefault: TVehicle = {
   id: 0,
-  capacity: [0],
-  maxCapacity: [0],
-  timeWindows: [
-    {
-      windowStart: "00:00:00",
-      windowEnd: "00:00:00"
-    }
-  ],
-  penaltyCapacityOverload: 0,
-  penaltyMaxCapacityOverload: 0,
-  penaltyOverwork: 0,
+  carCapacities: [{
+    demandId: 0,
+    demandName: "",
+    capacity: 0,
+    maxCapacity: 0,
+  }],
+  carWorkHours: {
+    windowStart: "00:00:00",
+    windowEnd: "00:00:00"
+  },
+  capacityOverloadPenalty: 0,
+  maxCapacityOverloadPenalty: 0,
+  overWorkPenalty: 0,
+  routeTemplate: [null],
 }
 
 export const distanceDefault: TDistance = {
@@ -384,50 +387,50 @@ export const colors = [
   "#74AEFF",
 ]
 
-export const vehicles: TVehicle[] = [
-  {
-    id: 0,
-    capacity: [40, 20],
-    maxCapacity: [40, 20],
-    timeWindows: [
-      {
-        windowStart: "00:00:00",
-        windowEnd: "00:00:00"
-      }
-    ],
-    penaltyCapacityOverload: 1000,
-    penaltyMaxCapacityOverload: 1000,
-    penaltyOverwork: 1000,
-  },
-  {
-    id: 1,
-    capacity: [40, 20],
-    maxCapacity: [40, 20],
-    timeWindows: [
-      {
-        windowStart: "00:00:00",
-        windowEnd: "00:00:00"
-      }
-    ],
-    penaltyCapacityOverload: 1000,
-    penaltyMaxCapacityOverload: 1000,
-    penaltyOverwork: 1000,
-  },
-  {
-    id: 2,
-    capacity: [40, 20],
-    maxCapacity: [40, 20],
-    timeWindows: [
-      {
-        windowStart: "00:00:00",
-        windowEnd: "00:00:00"
-      }
-    ],
-    penaltyCapacityOverload: 1000,
-    penaltyMaxCapacityOverload: 1000,
-    penaltyOverwork: 1000,
-  },
-];
+// export const vehicles: TVehicle[] = [
+//   {
+//     id: 0,
+//     capacity: [40, 20],
+//     maxCapacity: [40, 20],
+//     timeWindows: [
+//       {
+//         windowStart: "00:00:00",
+//         windowEnd: "00:00:00"
+//       }
+//     ],
+//     penaltyCapacityOverload: 1000,
+//     penaltyMaxCapacityOverload: 1000,
+//     penaltyOverwork: 1000,
+//   },
+//   {
+//     id: 1,
+//     capacity: [40, 20],
+//     maxCapacity: [40, 20],
+//     timeWindows: [
+//       {
+//         windowStart: "00:00:00",
+//         windowEnd: "00:00:00"
+//       }
+//     ],
+//     penaltyCapacityOverload: 1000,
+//     penaltyMaxCapacityOverload: 1000,
+//     penaltyOverwork: 1000,
+//   },
+//   {
+//     id: 2,
+//     capacity: [40, 20],
+//     maxCapacity: [40, 20],
+//     timeWindows: [
+//       {
+//         windowStart: "00:00:00",
+//         windowEnd: "00:00:00"
+//       }
+//     ],
+//     penaltyCapacityOverload: 1000,
+//     penaltyMaxCapacityOverload: 1000,
+//     penaltyOverwork: 1000,
+//   },
+// ];
 
 export const distances: TDistance[] = [
   {
@@ -526,7 +529,6 @@ export const locationTypes: TLocationType[] = [
     typeName: "client"
   },
 ]
-
 
 
 export const defaultStoreState = {

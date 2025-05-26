@@ -130,7 +130,7 @@ function LocationsPage() {
               <div className="locations__list-item__header__icon-container">
                 <svg className="locations__list-item__header__icon" width="40" height="40">
                   <use
-                    href={`${outlinedSvg}#${el.pointType.typeName.length!==0 ? el.pointType.typeName.toLowerCase() : "image-cover"}`}/>
+                    href={`${outlinedSvg}#${el.pointType.typeName.length !== 0 ? el.pointType.typeName.toLowerCase() : "image-cover"}`}/>
                 </svg>
               </div>
               <div className="locations__list-item__header__info">
@@ -164,10 +164,11 @@ function LocationsPage() {
               </div>
             </div>
             <div className="locations__list-item__features">
-              <div className="locations__list-item__features-info">
+              {el.demands.length !== 0 && <div className="locations__list-item__features-info">
                 <p className="locations__list-item__features-info__title">Demands</p>
-                <p className="locations__list-item__features-info__value">{el.demands.map(d => d.demandName).join(', ')}</p>
-              </div>
+                <p
+                  className="locations__list-item__features-info__value">{el.demands.map(d => d.demandValue).join(', ')}</p>
+              </div>}
               <div className="locations__list-item__features-info">
                 <p className="locations__list-item__features-info__title">Service time</p>
                 <p
@@ -175,9 +176,9 @@ function LocationsPage() {
               </div>
             </div>
             <div className="locations__list-item__footer">
-              <div>
+              <div className="locations__list-item__footer-container">
                 <p className="locations__list-item__features-title">Penalties</p>
-                <div className="locations__list-item__features">
+                <div className="locations__list-item__features locations__list-item__features--footer">
                   <div className="locations__list-item__features-info">
                     <p className="locations__list-item__features-info__title">Late arrival</p>
                     <p className="locations__list-item__features-info__value">{el.penaltyLate}</p>
