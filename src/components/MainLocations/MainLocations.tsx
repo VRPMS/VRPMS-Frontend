@@ -71,6 +71,9 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
     {searchedLocations.length !== 0 ? <ul className="main-locations__list">
         {searchedLocations.map((el, index) => {
           return <li
+            ref={(item)=>{
+              itemRef.current[el.id] = item
+            }}
             onClick={() => onLocationClick(null, el.id)}
             key={index}
             className={el.id === activeLocation

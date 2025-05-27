@@ -129,6 +129,10 @@
   background: #FFFFFF;
   box-shadow: 0px -3px 46px 0px rgba(0, 0, 0, 0.06), -1px -1.184px 19.234px 0px rgba(0, 0, 0, 0.00), 0px -0.674px 7.475px 0px rgba(0, 0, 0, 0.00), 1px -0.332px 2.426px 0px rgba(0, 0, 0, 0.00);
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &--active {
     border: 2px solid #3639E4;
   }
@@ -210,8 +214,9 @@
 
       &:hover {
         background-color: #26262633;
-
+        cursor: pointer;
       }
+
       &:hover &__icon {
         stroke: #262626;
       }
