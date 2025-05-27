@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { TDistance } from "../../data/types.tsx";
 import outlinedSvg from "../../assets/outlined.svg";
+import notFoundPNG from "../../assets/not-found.png";
 import '../LocationsPage/LocationsPage.scss';
 import './RoutesPage.scss';
 import dayjs from "dayjs";
@@ -11,7 +12,7 @@ import { locationDefault, vehicleDefault } from "../../data/data.tsx";
 function RoutesPage() {
   const [{ locations, distances, vehicles }] = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get("query") || "";
+  let query = searchParams.get("query") || "";
   const [searchedDistances, setSearchedDistances] = useState<TDistance[]>([]);
 
   useEffect(() => {
@@ -30,6 +31,10 @@ function RoutesPage() {
       }
     ))
   }, [searchParams, locations, vehicles]);
+
+  useEffect(() => {
+    query = ""
+  }, []);
 
   return <div className="routes">
     <header className="locations__header">
@@ -53,7 +58,7 @@ function RoutesPage() {
     </header>
     <div className="locations__list-container">
       <h2 className="locations__list-container__title">Distances and durations</h2>
-      {searchedDistances && <ul className="routes__list">
+      {searchedDistances.length !== 0 ? <ul className="routes__list">
         {searchedDistances.map((el, index) => {
           const locationFrom = locations.find(item => item.id === el.locationFromId) ?? locationDefault;
           const locationTo = locations.find(item => item.id === el.locationToId) ?? locationDefault;
@@ -109,7 +114,11 @@ function RoutesPage() {
             </div>
           </li>
         })}
-      </ul>}
+      </ul>
+      : <div className="not-found">
+          <img className="not-found__image"  src={notFoundPNG} alt="" width="64" height="64"/>
+          <p className="not-found__text" >No routes at your request</p>
+        </div>}
     </div>
   </div>
 }
