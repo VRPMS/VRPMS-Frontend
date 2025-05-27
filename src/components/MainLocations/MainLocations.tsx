@@ -5,7 +5,8 @@ import notFoundPNG from "../../assets/not-found.png";
 import './MainLocations.scss';
 import dayjs from "dayjs";
 import { useStore } from "../../store/store.tsx";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { TLocation } from "../../data/types.tsx";
 
 type TProps = {
   activeLocation: number | null,
@@ -17,20 +18,32 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   let query = searchParams.get("query") || "";
   const itemRef = useRef<Record<string, HTMLLIElement>>({});
+  const [searchedLocations, setSearchedLocations] = useState<TLocation[]>([]);
 
   useEffect(() => {
     query = ""
   }, []);
 
-  let searchedLocations = locations.filter(el => {
-      return (el?.id.toString() && el?.id.toString().includes(query))
-        || (el?.longitude.toString() && el?.longitude.toString().includes(query))
-        || (el?.latitude && el?.latitude.toString().includes(query))
-        || ("Location ID: " + el?.id).includes(query)
+  useEffect(() => {
+    setSearchedLocations(locations.filter(el => {
+        return (el?.id.toString() && el?.id.toString().includes(query))
+          || (el?.longitude.toString() && el?.longitude.toString().includes(query))
+          || (el?.latitude && el?.latitude.toString().includes(query))
+          || ("Location ID: " + el?.id).includes(query)
+      }
+    ))
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (activeLocation) {
+      if (!elementIsVisibleInViewport(itemRef.current[activeLocation.toString()])) {
+        itemRef.current[activeLocation.toString() as string]?.scrollIntoView({ behavior: "smooth" })
+      }
     }
-  );
+  }, [activeLocation]);
 
   const elementIsVisibleInViewport = (el: HTMLLIElement, partiallyVisible = false) => {
+    if (!el) return false;
     const { top, left, bottom, right } = el.getBoundingClientRect();
     const { innerHeight, innerWidth } = window;
     return partiallyVisible
@@ -40,11 +53,6 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
       : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
   };
 
-  if (activeLocation) {
-    if (!elementIsVisibleInViewport(itemRef.current[activeLocation.toString()])) {
-      itemRef.current[activeLocation.toString() as string].scrollIntoView({ behavior: "smooth" })
-    }
-  }
 
   return (<div className="main-locations">
     <div className="main-locations__header">
