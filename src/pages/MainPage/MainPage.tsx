@@ -294,7 +294,7 @@ function MainPage() {
       <div className="main__map__container">
         <div className="main__map">
           <Map
-            mapId='MAP_ID'
+            mapId='cbc451e2502704713e08c741'
             defaultZoom={7}
             defaultCenter={{ lat: Number(locations[0].latitude), lng: Number(locations[0].longitude) }}>
             <>
