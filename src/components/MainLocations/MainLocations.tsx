@@ -5,7 +5,7 @@ import notFoundPNG from "../../assets/not-found.png";
 import './MainLocations.scss';
 import dayjs from "dayjs";
 import { useStore } from "../../store/store.tsx";
-import { RefObject, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type TProps = {
   activeLocation: number | null,
@@ -71,14 +71,7 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
     {searchedLocations.length !== 0 ? <ul className="main-locations__list">
         {searchedLocations.map((el, index) => {
           return <li
-            ref={(item=>{
-              if(item) {
-                itemRef.current[el.id] = item
-              }
-            })}
-            onClick={() => {
-              onLocationClick(null, el.id)
-            }}
+            onClick={() => onLocationClick(null, el.id)}
             key={index}
             className={el.id === activeLocation
               ? "main-locations__list-item main-locations__list-item--active"
