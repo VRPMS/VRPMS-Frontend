@@ -1,4 +1,5 @@
 import outlinedSvg from "../../assets/outlined.svg";
+import notFoundPNG from "../../assets/not-found.png";
 import { useSearchParams } from "react-router-dom";
 import { ReactElement, useEffect, useState } from "react";
 import { TLocation } from "../../data/types.tsx";
@@ -14,7 +15,7 @@ import { useStore } from "../../store/store.tsx";
 function LocationsPage() {
   const [{ locations, locationTypes }] = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get("query") || "";
+  let query = searchParams.get("query") || "";
   const [locationType, setLocationType] = useState<number | string>("");
   const [searchedLocations, setSearchedLocations] = useState<TLocation[]>([]);
 
@@ -33,6 +34,10 @@ function LocationsPage() {
       }
     ))
   }, [locationType, searchParams]);
+
+  useEffect(() => {
+    query = ""
+  }, []);
 
   return <div className="locations">
     <header className="locations__header">
@@ -56,7 +61,7 @@ function LocationsPage() {
           id="demo-simple-select-filled"
           displayEmpty
           value={locationType}
-          onChange={(e: SelectChangeEvent<unknown>)=>setLocationType(e?.target?.value as number)}
+          onChange={(e: SelectChangeEvent<unknown>) => setLocationType(e?.target?.value as number)}
           label="Location type"
           IconComponent={KeyboardArrowDownRoundedIcon}
           sx={{
@@ -119,7 +124,7 @@ function LocationsPage() {
     </header>
     <div className="locations__list-container">
       <h2 className="locations__list-container__title">Locations</h2>
-      {searchedLocations && <ul className="locations__list">
+      {searchedLocations.length !== 0 ? <ul className="locations__list">
         {searchedLocations.map((el, index) => {
           return <li key={index} className="locations__list-item">
             <div className="locations__list-item__header">
@@ -194,7 +199,11 @@ function LocationsPage() {
             </div>
           </li>
         })}
-      </ul>}
+      </ul>
+      : <div className="not-found">
+          <img className="not-found__image"  src={notFoundPNG} alt="" width="64" height="64"/>
+          <p className="not-found__text" >No locations at your request</p>
+        </div>}
     </div>
   </div>
 }

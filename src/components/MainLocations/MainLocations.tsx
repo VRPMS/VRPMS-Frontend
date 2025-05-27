@@ -1,9 +1,11 @@
 import { NavLink, useSearchParams } from "react-router-dom";
 import { paths } from "../../routes/routes.tsx";
 import outlinedSvg from '../../assets/outlined.svg';
+import notFoundPNG from "../../assets/not-found.png";
 import './MainLocations.scss';
 import dayjs from "dayjs";
 import { useStore } from "../../store/store.tsx";
+import { RefObject, useEffect, useRef } from "react";
 
 type TProps = {
   activeLocation: number | null,
@@ -13,7 +15,12 @@ type TProps = {
 function MainLocations({ activeLocation, onLocationClick }: TProps) {
   const [{ locations }] = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get("query") || "";
+  let query = searchParams.get("query") || "";
+  const listRef = useRef<HTMLUListElement | null>(null);
+
+  useEffect(() => {
+    query = ""
+  }, []);
 
   let searchedLocations = locations.filter(el => {
       return (el?.id.toString() && el?.id.toString().includes(query))
@@ -23,46 +30,41 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
     }
   );
 
-
-  if (activeLocation !== null) {
+  if (activeLocation) {
     searchedLocations = searchedLocations.sort((a, b) => {
       if (a.id === activeLocation) return -1;
       if (b.id === activeLocation) return 1;
       return 0;
     });
+    if (listRef.current) {
+      listRef.current?.scrollTo({top: 0, behavior: "instant"});
+    }
   }
 
   return (<div className="main-locations">
-      <div className="main-locations__header">
-        <NavLink
-          to={paths.locations}
-          className="main-locations__header-title">
-          <h2 className="main-locations__header-title__text">Locations</h2>
-          <svg className="main-locations__header-title__icon" width="24" height="24">
-            <use href={`${outlinedSvg}#arrow-link`}/>
-          </svg>
-        </NavLink>
-      </div>
-      <label className="main-locations__search">
-        <svg className="main-locations__search__icon" width="24" height="24">
-          <use href={outlinedSvg + "#search"}/>
+    <div className="main-locations__header">
+      <NavLink
+        to={paths.locations}
+        className="main-locations__header-title">
+        <h2 className="main-locations__header-title__text">Locations</h2>
+        <svg className="main-locations__header-title__icon" width="24" height="24">
+          <use href={`${outlinedSvg}#arrow-link`}/>
         </svg>
-        <input
-          className="main-locations__search__input"
-          placeholder="Search by id or coordinates"
-          onChange={(e) => setSearchParams({
-            query: e.target.value
-          })}/>
-      </label>
-      <ul className="main-locations__list">
+      </NavLink>
+    </div>
+    <label className="main-locations__search">
+      <svg className="main-locations__search__icon" width="24" height="24">
+        <use href={outlinedSvg + "#search"}/>
+      </svg>
+      <input
+        className="main-locations__search__input"
+        placeholder="Search by id or coordinates"
+        onChange={(e) => setSearchParams({
+          query: e.target.value
+        })}/>
+    </label>
+    {searchedLocations.length !== 0 ? <ul ref={listRef as RefObject<HTMLUListElement>} className="main-locations__list">
         {searchedLocations.map((el, index) => {
-          const isActive = el.id === activeLocation;
-          const itemRef = isActive ? (el: HTMLLIElement | null) => {
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          } : undefined;
-
           return <li
             onClick={() => onLocationClick(null, el.id)}
             key={index}
@@ -108,8 +110,11 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
           </li>
         })}
       </ul>
-    </div>
-  );
+      : <div className="not-found">
+        <img className="not-found__image" src={notFoundPNG} alt="" width="64" height="64"/>
+        <p className="not-found__text">No locations at your request</p>
+      </div>}
+  </div>);
 }
 
 export default MainLocations;

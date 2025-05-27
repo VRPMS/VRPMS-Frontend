@@ -63,6 +63,7 @@
 
 .main-locations__search {
   margin-top: 20px;
+  margin-bottom: 16px;
   display: flex;
   gap: 2px;
   height: 48px;
@@ -94,7 +95,6 @@
 }
 
 .main-locations__list {
-  margin-top: 16px;
   display: flex;
   padding-right: 12px;
   flex-direction: column;
@@ -102,7 +102,7 @@
   gap: 12px;
   flex: 1 0 0;
   align-self: stretch;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -125,7 +125,7 @@
   align-items: flex-start;
   gap: 12px;
   align-self: stretch;
-  border-radius: 16px;
+  border-radius: 12px;
   background: #FFFFFF;
   box-shadow: 0px -3px 46px 0px rgba(0, 0, 0, 0.06), -1px -1.184px 19.234px 0px rgba(0, 0, 0, 0.00), 0px -0.674px 7.475px 0px rgba(0, 0, 0, 0.00), 1px -0.332px 2.426px 0px rgba(0, 0, 0, 0.00);
 
