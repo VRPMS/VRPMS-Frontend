@@ -17,6 +17,7 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   let query = searchParams.get("query") || "";
   const listRef = useRef<HTMLUListElement | null>(null);
+  const itemRef = useRef<Record<number, HTMLLIElement>>({});
 
   useEffect(() => {
     query = ""
@@ -30,14 +31,19 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
     }
   );
 
+  const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
+    const { top, left, bottom, right } = el.getBoundingClientRect();
+    const { innerHeight, innerWidth } = window;
+    return partiallyVisible
+      ? ((top > 0 && top < innerHeight) ||
+        (bottom > 0 && bottom < innerHeight)) &&
+      ((left > 0 && left < innerWidth) || (right > 0 && right < innerWidth))
+      : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+  };
+
   if (activeLocation) {
-    searchedLocations = searchedLocations.sort((a, b) => {
-      if (a.id === activeLocation) return -1;
-      if (b.id === activeLocation) return 1;
-      return 0;
-    });
-    if (listRef.current) {
-      listRef.current?.scrollTo({top: 0, behavior: "instant"});
+    if(!elementIsVisibleInViewport(itemRef.current[activeLocation.toString()])) {
+      itemRef.current[activeLocation.toString()].scrollIntoView({behavior: "smooth"})
     }
   }
 
@@ -66,7 +72,14 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
     {searchedLocations.length !== 0 ? <ul ref={listRef as RefObject<HTMLUListElement>} className="main-locations__list">
         {searchedLocations.map((el, index) => {
           return <li
-            onClick={() => onLocationClick(null, el.id)}
+            ref={(item=>{
+              if(item) {
+                itemRef.current[el.id] = item
+              }
+            })}
+            onClick={() => {
+              onLocationClick(null, el.id)
+            }}
             key={index}
             className={el.id === activeLocation
               ? "main-locations__list-item main-locations__list-item--active"
