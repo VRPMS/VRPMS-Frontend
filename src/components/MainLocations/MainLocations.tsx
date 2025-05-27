@@ -41,8 +41,8 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
   };
 
   if (activeLocation) {
-    if(!elementIsVisibleInViewport(itemRef.current[activeLocation.toString()])) {
-      itemRef.current[activeLocation.toString() as string].scrollIntoView({behavior: "smooth"})
+    if (!elementIsVisibleInViewport(itemRef.current[activeLocation.toString()])) {
+      itemRef.current[activeLocation.toString() as string].scrollIntoView({ behavior: "smooth" })
     }
   }
 
@@ -71,8 +71,10 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
     {searchedLocations.length !== 0 ? <ul className="main-locations__list">
         {searchedLocations.map((el, index) => {
           return <li
-            ref={(item)=>{
-              itemRef.current[el.id] = item
+            ref={(item) => {
+              if (item) {
+                itemRef.current[el.id] = item
+              }
             }}
             onClick={() => onLocationClick(null, el.id)}
             key={index}
