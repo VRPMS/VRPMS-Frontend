@@ -1,6 +1,6 @@
 import './PageNotFound.scss';
-import errorPNG from '../../assets/error.png';
-import $outlinedSVG from '../../assets/outlined.svg';
+import errorPNG from '../../assets/images/error.png';
+import $outlinedSVG from '../../assets/svg/outlined.svg';
 
 function PageNotFound () {
   return <div className="page-not-found">

@@ -1,13 +1,13 @@
-import routeIcon from '../../assets/route.png';
-import routePointIcon from '../../assets/route-point.png';
-import routeActivePointIcon from '../../assets/route-active-point.png';
+import routeIcon from '../../assets/images/route.png';
+import routePointIcon from '../../assets/images/route-point.png';
+import routeActivePointIcon from '../../assets/images/route-active-point.png';
 import './MainRoute.scss';
 import { useEffect, useState } from "react";
 import { TDistance, TRoute } from "../../data/types.tsx";
 import { routes } from "../../data/data.tsx";
 import { NavLink } from "react-router-dom";
 import { paths } from "../../routes/routes.tsx";
-import outlinedSvg from "../../assets/outlined.svg";
+import outlinedSvg from "../../assets/svg/outlined.svg";
 import dayjs from "dayjs";
 import { useStore } from "../../store/store.tsx";
 

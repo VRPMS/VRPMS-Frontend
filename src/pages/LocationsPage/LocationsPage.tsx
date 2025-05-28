@@ -1,5 +1,5 @@
-import outlinedSvg from "../../assets/outlined.svg";
-import notFoundPNG from "../../assets/not-found.png";
+import outlinedSvg from "../../assets/svg/outlined.svg";
+import notFoundPNG from "../../assets/images/not-found.png";
 import { useSearchParams } from "react-router-dom";
 import { ReactElement, useEffect, useState } from "react";
 import { TLocation } from "../../data/types.tsx";
