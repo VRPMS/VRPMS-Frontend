@@ -1,4 +1,4 @@
-import outlinedSvg from '../assets/outlined.svg';
+import outlinedSvg from '../assets/svg/outlined.svg';
 import { Poi, TDistance, TLocation, TLocationType, TRoute, TVehicle } from "./types.tsx";
 
 export const links = [

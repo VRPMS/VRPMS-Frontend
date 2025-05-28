@@ -13,7 +13,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import TextField from '@mui/material/TextField';
 import { Checkbox } from "@mui/material";
-import outlinedSvg from "../../assets/outlined.svg";
+import outlinedSvg from "../../assets/svg/outlined.svg";
 import { useStore } from "../../store/store.tsx";
 
 type TPolylineRef = {

@@ -1,7 +1,7 @@
 import { NavLink, useSearchParams } from "react-router-dom";
 import { paths } from "../../routes/routes.tsx";
-import outlinedSvg from '../../assets/outlined.svg';
-import notFoundPNG from "../../assets/not-found.png";
+import outlinedSvg from '../../assets/svg/outlined.svg';
+import notFoundPNG from "../../assets/images/not-found.png";
 import './MainLocations.scss';
 import dayjs from "dayjs";
 import { useStore } from "../../store/store.tsx";
