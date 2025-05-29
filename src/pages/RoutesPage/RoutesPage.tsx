@@ -25,9 +25,9 @@ function RoutesPage() {
           || (locationFrom?.latitude && locationFrom?.latitude.toString().includes(query))
           || (locationTo?.longitude.toString() && locationTo?.longitude.toString().includes(query))
           || (locationTo?.latitude && locationTo?.latitude.toString().includes(query))
-          || ("Vehicle ID: " + vehicle?.id).includes(query)
-          || ("Location ID: " + locationFrom?.id).includes(query)
-          || ("Location ID: " + locationTo?.id).includes(query)
+          || ("Vehicle ID: " + vehicle?.id).toLowerCase().includes(query)
+          || ("Location ID: " + locationFrom?.id).toLowerCase().includes(query)
+          || ("Location ID: " + locationTo?.id).toLowerCase().includes(query)
       }
     ))
   }, [searchParams, locations, vehicles]);

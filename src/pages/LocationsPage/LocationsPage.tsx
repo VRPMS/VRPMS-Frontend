@@ -30,7 +30,7 @@ function LocationsPage() {
         return (el?.id.toString() && el?.id.toString().includes(query))
           || (el?.longitude.toString() && el?.longitude.toString().includes(query))
           || (el?.latitude && el?.latitude.toString().includes(query))
-          || ("Location ID: " + el?.id).includes(query)
+          || ("Location ID: " + el?.id).toLowerCase().includes(query)
       }
     ))
   }, [locationType, searchParams]);
