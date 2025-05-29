@@ -16,7 +16,7 @@ function VehiclesPage() {
   useEffect(() => {
     setSearchedVehicles(vehicles.filter(el => {
         return (el?.id.toString() && el?.id.toString().includes(query))
-          || ("Vehicle ID: " + el?.id).includes(query)
+          || ("Vehicle ID: " + el?.id).toLowerCase().includes(query)
       }
     ))
   }, [searchParams]);
