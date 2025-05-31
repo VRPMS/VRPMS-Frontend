@@ -200,7 +200,7 @@ function MainPage() {
         <Autocomplete
           multiple
           id="checkboxes-tags-demo"
-          options={vehicles}
+          options={vehicles.filter(vehicle=> routes.find(route=>route.carId === vehicle.id))}
           disableCloseOnSelect
           onChange={(event: any, newValue: TVehicle[] | null) => {
             setSelectedVehicles(newValue ?? []);
