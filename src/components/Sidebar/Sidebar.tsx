@@ -13,7 +13,7 @@ function Sidebar() {
 
   const handleInputFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if(!files) {
+    if (!files) {
       const result = await uploadFile(null);
       setError(result.error);
     }
@@ -21,8 +21,11 @@ function Sidebar() {
     if (files && files.length > 0) {
       console.log("Selected file:", files[0]);
       const result = await uploadFile(files[0]);
-      setError(result.error);
-      setDataUploaded(true);
+      if (result) {
+        console.log(111, result)
+        setError(result.error);
+        setDataUploaded(true);
+      }
     }
   };
 

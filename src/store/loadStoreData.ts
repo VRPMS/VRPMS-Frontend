@@ -1,13 +1,15 @@
 import { Poi, TLocation, TState } from "../data/types.tsx";
-import { distances, locations, routes } from "../data/data.tsx";
+import uniqolor from "uniqolor";
+// import { locations } from "../data/data.tsx";
 
 const BASE_LINK = 'https://vrpms-backend.fly.dev/';
 
 export async function loadData() {
-  const [locations, vehicles, locationTypes] = await Promise.all([
+  const [locations, vehicles, locationTypes, routes] = await Promise.all([
     loadCollection("locations"),
     loadCollection("cars"),
     loadCollection("points/types/lov"),
+    loadCollection("solutions/current/routes"),
   ]);
 
   const points: Poi[] = locations.map((el : TLocation) => {
@@ -21,13 +23,20 @@ export async function loadData() {
     }
   });
 
+  const colors = routes.map(()=>{
+    return uniqolor.random({
+      saturation: 80,
+      lightness: [45, 70],
+    }).color
+  })
+
   return {
     locations,
-    routes,
     vehicles,
-    points,
-    distances: distances,
     locationTypes,
+    routes,
+    points,
+    colors
   } as TState
 }
 

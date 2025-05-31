@@ -3,7 +3,7 @@ import { JSX, ReactNode, useEffect, useRef, useState } from "react";
 import MainLocations from "../../components/MainLocations/MainLocations.tsx";
 import MainRoute from "../../components/MainRoute/MainRoute.tsx";
 import { AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
-import { colors, pointDefault } from "../../data/data.tsx";
+import { pointDefault } from "../../data/data.tsx";
 import warehousePNG from '../../assets/images/warehouse.png';
 import crossdockPNG from '../../assets/images/crossdock.png';
 import pointPNG from '../../assets/images/point.png';
@@ -18,11 +18,12 @@ import { useStore } from "../../store/store.tsx";
 
 type TPolylineRef = {
   routeId: number,
-  line: google.maps.Polyline
+  line: google.maps.Polyline,
+  vehicleId: number
 }
 
 function MainPage() {
-  const [{ locations, points, routes, vehicles }] = useStore();
+  const [{ locations, points, routes, vehicles, colors }] = useStore();
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activeLocation, setActiveLocation] = useState<number | null>(null);
   const [activeRoute, setActiveRoute] = useState<number | null>(null);
@@ -33,19 +34,17 @@ function MainPage() {
   const polylinesRef = useRef<TPolylineRef[]>([]);
   const selectedPolylineRef = useRef<google.maps.Polyline | null>(null);
 
-  const drawRoute = (routePoints: Poi[], index: number) => {
+  const drawRoute = (routePoints: Poi[], index: number, origin: Poi = pointDefault) => {
     if (routePoints.length < 2) return;
-    const origin = routePoints.find(el => el?.pointType.typeId === 0)?.location ?? pointDefault.location;
-    const destination = routePoints.find(el => el?.pointType.typeId === 0)?.location ?? pointDefault.location;
-    const waypoints = routePoints.filter(el => el?.pointType.typeId !== 0).map(p => ({
+    const waypoints = routePoints.filter(el => el?.pointType.typeId && el?.pointType.typeId !== 1).map(p => ({
       location: p.location,
       stopover: true
     }));
 
     const directionsService = new google.maps.DirectionsService();
     directionsService.route({
-      origin,
-      destination,
+      origin: origin.location,
+      destination: origin.location,
       waypoints,
       travelMode: google.maps.TravelMode.DRIVING,
       optimizeWaypoints: false,
@@ -78,7 +77,9 @@ function MainPage() {
           setActiveRoute(routes[index].id);
         });
 
-        polylinesRef.current.push({ routeId: routes[index].id, line: newPolyline });
+        const vehicleId = routes[index].carId
+
+        polylinesRef.current.push({ routeId: routes[index].id, line: newPolyline, vehicleId: vehicleId });
       }
     });
   };
@@ -88,7 +89,12 @@ function MainPage() {
 
     polylinesRef.current = [];
 
-    routes.forEach((route, index) => drawRoute(route.points, index));
+    routes.forEach((route, index) => {
+      const currentPoints = route.visits.map(el => {
+        return points.find(point => el.locationId === point.id) as Poi;
+      })
+      drawRoute(currentPoints, index, currentPoints[0])
+    });
 
     const zIndex = selectedPolylineRef.current?.get('zIndex');
     const mapClickListener = map.addListener('click', () => {
@@ -112,7 +118,9 @@ function MainPage() {
   useEffect(() => {
     if (selectedVehicles.length !== 0) {
       polylinesRef.current.forEach(el => {
-        const route = selectedVehicles.find(item => item.id === el.routeId);
+        const route = selectedVehicles.find(item => {
+          return item.id === el.vehicleId
+        });
         if (!route) {
           el.line.setVisible(false);
           if (el.routeId === activeRoute) {
@@ -296,7 +304,10 @@ function MainPage() {
           <Map
             mapId='cbc451e2502704713e08c741'
             defaultZoom={7}
-            defaultCenter={{ lat: Number(locations[0].latitude), lng: Number(locations[0].longitude) }}>
+            defaultCenter={{
+              lat: Number(locations.find(el => el?.pointType.typeId === 1)?.latitude ?? 0),
+              lng: Number(locations.find(el => el?.pointType.typeId === 1)?.longitude ?? 0)
+            }}>
             <>
               {points?.map((poi: Poi) => {
                 const icon = poi.pointType.typeId === 1 ? warehousePNG : poi.pointType.typeId === 2 ? crossdockPNG : pointPNG;

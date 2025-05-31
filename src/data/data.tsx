@@ -1,5 +1,5 @@
 import outlinedSvg from '../assets/svg/outlined.svg';
-import { Poi, TDistance, TLocation, TLocationType, TRoute, TVehicle } from "./types.tsx";
+import { Poi, TLocation, TLocationType, TRoute, TState, TVehicle } from "./types.tsx";
 
 export const links = [
   {
@@ -329,19 +329,25 @@ export const vehicleDefault: TVehicle = {
   routeTemplate: [null],
 }
 
-export const distanceDefault: TDistance = {
-  id: 0,
-  vehicleId: 0,
-  locationFromId: 0,
-  locationToId: 0,
-  distance: 0,
-  duration: 0
-}
+// export const distanceDefault: TDistance = {
+//   id: 0,
+//   vehicleId: 0,
+//   locationFromId: 0,
+//   locationToId: 0,
+//   distance: 0,
+//   duration: 0
+// }
 
 export const routeDefault: TRoute = {
-  id: 0,
-  vehicleId: 0,
-  points: [pointDefault]
+  id: 1,
+  carId: 1,
+  visits: [{
+    locationId: 1,
+    arrivalTime: null,
+    departureTime: null,
+    distance: 0,
+    duration: 0
+  }]
 }
 
 export const locationTypeDefault: TLocationType = {
@@ -364,19 +370,111 @@ export const points: Poi[] = locations.map(el => {
 
 export const routes: TRoute[] = [
   {
-    id: 0,
-    vehicleId: 0,
-    points: [points[0], points[1], points[2], points[3], points[0]]
-  },
-  {
     id: 1,
-    vehicleId: 1,
-    points: [points[0], points[6], points[7], points[0]]
-  },
-  {
+    carId: 1,
+    visits: [
+      {
+        locationId: 1,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 3,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 7,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 23,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 1,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+    ]
+  }, {
     id: 2,
-    vehicleId: 2,
-    points: [points[0], points[5], points[1], points[0]]
+    carId: 2,
+    visits: [
+      {
+        locationId: 1,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 5,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 6,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 1,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+    ]
+  }, {
+    id: 3,
+    carId: 3,
+    visits: [
+      {
+        locationId: 1,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 8,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 24,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+      {
+        locationId: 1,
+        arrivalTime: "00:00",
+        departureTime: null,
+        distance: 0,
+        duration: 0
+      },
+    ]
   },
 ]
 
@@ -432,88 +530,88 @@ export const colors = [
 //   },
 // ];
 
-export const distances: TDistance[] = [
-  {
-    id: 0,
-    vehicleId: 0,
-    locationFromId: 0,
-    locationToId: 1,
-    distance: 190162.012578476,
-    duration: 8640
-  },
-  {
-    id: 1,
-    vehicleId: 0,
-    locationFromId: 1,
-    locationToId: 2,
-    distance: 1648.596667861,
-    duration: 180
-  },
-  {
-    id: 2,
-    vehicleId: 0,
-    locationFromId: 2,
-    locationToId: 3,
-    distance: 53.19274487,
-    duration: 0
-  },
-  {
-    id: 3,
-    vehicleId: 0,
-    locationFromId: 3,
-    locationToId: 0,
-    distance: 190829.035818777,
-    duration: 8700
-  },
-  {
-    id: 4,
-    vehicleId: 1,
-    locationFromId: 0,
-    locationToId: 6,
-    distance: 198479.171007548,
-    duration: 8700
-  },
-  {
-    id: 5,
-    vehicleId: 1,
-    locationFromId: 6,
-    locationToId: 7,
-    distance: 108820.263557334,
-    duration: 5520
-  },
-  {
-    id: 6,
-    vehicleId: 1,
-    locationFromId: 7,
-    locationToId: 0,
-    distance: 300387.376663843,
-    duration: 13500
-  },
-  {
-    id: 7,
-    vehicleId: 2,
-    locationFromId: 0,
-    locationToId: 5,
-    distance: 191669.403569066,
-    duration: 8760
-  },
-  {
-    id: 8,
-    vehicleId: 2,
-    locationFromId: 5,
-    locationToId: 1,
-    distance: 1700.218382256,
-    duration: 180
-  },
-  {
-    id: 9,
-    vehicleId: 2,
-    locationFromId: 1,
-    locationToId: 0,
-    distance: 190162.012578476,
-    duration: 8640
-  },
-];
+// export const distances: TDistance[] = [
+//   {
+//     id: 0,
+//     vehicleId: 0,
+//     locationFromId: 0,
+//     locationToId: 1,
+//     distance: 190162.012578476,
+//     duration: 8640
+//   },
+//   {
+//     id: 1,
+//     vehicleId: 0,
+//     locationFromId: 1,
+//     locationToId: 2,
+//     distance: 1648.596667861,
+//     duration: 180
+//   },
+//   {
+//     id: 2,
+//     vehicleId: 0,
+//     locationFromId: 2,
+//     locationToId: 3,
+//     distance: 53.19274487,
+//     duration: 0
+//   },
+//   {
+//     id: 3,
+//     vehicleId: 0,
+//     locationFromId: 3,
+//     locationToId: 0,
+//     distance: 190829.035818777,
+//     duration: 8700
+//   },
+//   {
+//     id: 4,
+//     vehicleId: 1,
+//     locationFromId: 0,
+//     locationToId: 6,
+//     distance: 198479.171007548,
+//     duration: 8700
+//   },
+//   {
+//     id: 5,
+//     vehicleId: 1,
+//     locationFromId: 6,
+//     locationToId: 7,
+//     distance: 108820.263557334,
+//     duration: 5520
+//   },
+//   {
+//     id: 6,
+//     vehicleId: 1,
+//     locationFromId: 7,
+//     locationToId: 0,
+//     distance: 300387.376663843,
+//     duration: 13500
+//   },
+//   {
+//     id: 7,
+//     vehicleId: 2,
+//     locationFromId: 0,
+//     locationToId: 5,
+//     distance: 191669.403569066,
+//     duration: 8760
+//   },
+//   {
+//     id: 8,
+//     vehicleId: 2,
+//     locationFromId: 5,
+//     locationToId: 1,
+//     distance: 1700.218382256,
+//     duration: 180
+//   },
+//   {
+//     id: 9,
+//     vehicleId: 2,
+//     locationFromId: 1,
+//     locationToId: 0,
+//     distance: 190162.012578476,
+//     duration: 8640
+//   },
+// ];
 
 export const locationTypes: TLocationType[] = [
   {
@@ -531,13 +629,13 @@ export const locationTypes: TLocationType[] = [
 ]
 
 
-export const defaultStoreState = {
+export const defaultStoreState : TState= {
   locations: [locationDefault],
   vehicles: [vehicleDefault],
-  distances: [distanceDefault],
-  routes: [routeDefault],
   locationTypes: [locationTypeDefault],
+  routes: [routeDefault],
   points: [pointDefault],
+  colors: [],
   dataLoaded: false,
   isLoading: true
 }
