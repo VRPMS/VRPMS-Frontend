@@ -1,5 +1,5 @@
 import outlinedSvg from '../assets/svg/outlined.svg';
-import { Poi, TLocation, TLocationType, TRoute, TVehicle } from "./types.tsx";
+import { Poi, TLocation, TLocationType, TRoute, TState, TVehicle } from "./types.tsx";
 
 export const links = [
   {
@@ -629,12 +629,11 @@ export const locationTypes: TLocationType[] = [
 ]
 
 
-export const defaultStoreState = {
+export const defaultStoreState : TState= {
   locations: [locationDefault],
   vehicles: [vehicleDefault],
-  // distances: [distanceDefault],
-  routes: [routeDefault],
   locationTypes: [locationTypeDefault],
+  routes: [routeDefault],
   points: [pointDefault],
   colors: [],
   dataLoaded: false,

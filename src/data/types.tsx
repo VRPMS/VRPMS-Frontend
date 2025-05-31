@@ -3,10 +3,10 @@ import { Dispatch, SetStateAction } from "react";
 export type TState = {
   locations: TLocation[],
   vehicles: TVehicle[],
-  distances: TDistance[],
   locationTypes: TLocationType[],
   routes: TRoute[],
   points: Poi[],
+  colors: string[],
   dataLoaded: boolean,
   isLoading: boolean
 }

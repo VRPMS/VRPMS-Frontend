@@ -60,7 +60,7 @@ function MainPage() {
           path: fullPath,
           map,
           clickable: true,
-          strokeColor: colors[index].color,
+          strokeColor: colors[index],
           strokeOpacity: 0.8,
           strokeWeight: 5,
           geodesic: true,

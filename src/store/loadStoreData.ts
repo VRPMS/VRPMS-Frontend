@@ -27,7 +27,7 @@ export async function loadData() {
     return uniqolor.random({
       saturation: 80,
       lightness: [45, 70],
-    })
+    }).color
   })
 
   return {
