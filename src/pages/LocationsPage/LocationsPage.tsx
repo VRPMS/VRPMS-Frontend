@@ -10,8 +10,6 @@ import './LocationsPage.scss';
 import dayjs from "dayjs";
 import { useStore } from "../../store/store.tsx";
 
-//TODO add button (arrow) to location card to show it on map
-
 function LocationsPage() {
   const [{ locations, locationTypes }] = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
