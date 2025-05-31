@@ -56,8 +56,16 @@ export type TLocation = {
 
 export type TRoute = {
   id: number,
-  vehicleId: number,
-  points: Poi[]
+  carId: number,
+  visits: TVisit[]
+}
+
+export type TVisit = {
+  locationId: number,
+  arrivalTime: string | null,
+  departureTime: string | null,
+  distance: number,
+  duration: number
 }
 
 export type TVehicle = {
