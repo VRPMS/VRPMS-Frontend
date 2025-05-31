@@ -22,7 +22,6 @@ function Sidebar() {
       console.log("Selected file:", files[0]);
       const result = await uploadFile(files[0]);
       if (result) {
-        console.log(111, result)
         setError(result.error);
         setDataUploaded(true);
       }

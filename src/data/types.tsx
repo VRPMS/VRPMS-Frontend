@@ -75,7 +75,7 @@ export type TVehicle = {
   capacityOverloadPenalty: number,
   maxCapacityOverloadPenalty: number,
   overWorkPenalty: number,
-  routeTemplate: any[], // TODO when routeTemplate is ready
+  routeTemplate: any[],
 }
 
 export type TDistance = {
