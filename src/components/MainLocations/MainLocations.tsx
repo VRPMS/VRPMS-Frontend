@@ -36,21 +36,17 @@ function MainLocations({ activeLocation, onLocationClick }: TProps) {
 
   useEffect(() => {
     if (activeLocation) {
-      if (!elementIsVisibleInViewport(itemRef.current[activeLocation.toString()])) {
+      if (!elementIsVisible(itemRef.current[activeLocation.toString()])) {
         itemRef.current[activeLocation.toString() as string]?.scrollIntoView({ behavior: "smooth" })
       }
     }
   }, [activeLocation]);
 
-  const elementIsVisibleInViewport = (el: HTMLLIElement, partiallyVisible = false) => {
+  const elementIsVisible = (el: HTMLLIElement) => {
     if (!el) return false;
     const { top, left, bottom, right } = el.getBoundingClientRect();
     const { innerHeight, innerWidth } = window;
-    return partiallyVisible
-      ? ((top > 0 && top < innerHeight) ||
-        (bottom > 0 && bottom < innerHeight)) &&
-      ((left > 0 && left < innerWidth) || (right > 0 && right < innerWidth))
-      : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+    return top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
   };
 
 

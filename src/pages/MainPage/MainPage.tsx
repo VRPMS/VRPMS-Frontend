@@ -47,7 +47,6 @@ function MainPage() {
       destination: origin.location,
       waypoints,
       travelMode: google.maps.TravelMode.DRIVING,
-      optimizeWaypoints: false,
     }, (result, status) => {
       if (status === google.maps.DirectionsStatus.OK && result) {
         const fullPath: google.maps.LatLng[] = [];

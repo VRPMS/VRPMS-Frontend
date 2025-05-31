@@ -2,7 +2,7 @@ import routeIcon from '../../assets/images/route.png';
 import routePointIcon from '../../assets/images/route-point.png';
 import routeActivePointIcon from '../../assets/images/route-active-point.png';
 import './MainRoute.scss';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TRoute } from "../../data/types.tsx";
 import { NavLink } from "react-router-dom";
 import { paths } from "../../routes/routes.tsx";
@@ -20,10 +20,26 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
   const [{ routes }] = useStore();
   const [route, setRoute] = useState<TRoute | null>(null);
   const [tripDuration, setTripDuration] = useState<number>(0);
+  const itemRef = useRef<Record<string, HTMLLIElement>>({});
+
+  useEffect(() => {
+  }, [activeLocation]);
+
+  const elementIsVisible = (el: HTMLLIElement) => {
+    if (!el) return false;
+    const { top, left, bottom, right } = el.getBoundingClientRect();
+    const { innerHeight, innerWidth } = window;
+    return top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+  };
 
   useEffect(() => {
     setRoute(routes.find(el => el.id === activeRoute) ?? null);
-  }, [activeRoute]);
+    if (activeLocation) {
+      if (!elementIsVisible(itemRef.current[activeLocation.toString()])) {
+        itemRef.current[activeLocation.toString() as string]?.scrollIntoView({ behavior: "smooth" })
+      }
+    }
+  }, [activeRoute, activeLocation]);
 
   useEffect(() => {
     if (route) {
@@ -42,7 +58,7 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
     const h = dayjs(`2004-01-01T${duration}`).get('hours') ?? 0;
     const min = dayjs(`2004-01-01T${duration}`).get('minutes') ?? 0;
 
-    return `${h ? h + ' h' : ""} ${min ? min + ' min' : ""}`
+    return `${h ? h + ' h' : ""} ${min ? min + ' min' : "0 min"}`
   }
 
   return <>
@@ -63,6 +79,11 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
               <ul className="main-route__route-info__list-content">
                 {route?.visits.map((el, index) => {
                   return <li
+                    ref={(item) => {
+                      if (item) {
+                        itemRef.current[el.locationId] = item
+                      }
+                    }}
                     onClick={() => onLocationClick(null, el.locationId)}
                     key={index}
                     className={(el.locationId === activeLocation)
