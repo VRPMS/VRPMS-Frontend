@@ -43,7 +43,6 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
 
   useEffect(() => {
     if (route) {
-      console.log(111, route.visits.reduce((dur, el) => dur + new Date(`2004-01-01T${el.duration}`).getTime(), 0))
       setTripDuration(route.visits.reduce((dur, el) => dur + new Date(`2004-01-01T${el.duration}`).getTime(), 0));
     }
   }, [route]);
@@ -51,7 +50,7 @@ function MainRoute({ activeRoute, activeLocation, onLocationClick }: TProps) {
   const getDistance = (distance: number) => {
     const km = Math.floor(distance / 1000);
     const m = Math.round(distance % 1000);
-    return `${km ? km + ' km' : ""} ${m ? m + ' m' : ""}`
+    return `${km ? km + ' km' : ""} ${m ? m + ' m' : "0 m"}`
   }
 
   const getDuration = (duration: number) => {
